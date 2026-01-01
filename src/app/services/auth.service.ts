@@ -64,9 +64,9 @@ export class AuthService {
   }
 
   private clearStoredAuth() {
-    localStorage.removeItem('khair_user');
-    localStorage.removeItem('khair_token');
-    localStorage.removeItem('khair_user_id');
+    // Clear all authentication data from both localStorage and sessionStorage
+    localStorage.clear();
+    sessionStorage.clear();
     this.currentUser.set(null);
     this.isAuthenticated.set(false);
   }
@@ -101,6 +101,9 @@ export class AuthService {
     } catch (error: any) {
       console.error('Login error:', error);
       if (error.status === 401 || error.status === 422) {
+        // Clear any existing session data on authentication failure
+        localStorage.clear();
+        sessionStorage.clear();
         throw new Error('Invalid email or password. Please try again.');
       } else if (error.status === 0) {
         throw new Error('Network error. Please check your internet connection.');

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
 export interface Item {
@@ -59,7 +60,8 @@ export class ItemsService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   async getItems(): Promise<ItemsResponse> {
@@ -90,7 +92,11 @@ export class ItemsService {
       return response;
     } catch (error: any) {
       if (error.status === 401) {
-        throw new Error('Authentication failed. Please login again.');
+        // Clear all authentication data and redirect to login
+        localStorage.clear();
+        sessionStorage.clear();
+        this.authService.logout();
+        throw new Error('Session expired. Please login again.');
       } else if (error.status === 403) {
         throw new Error('Access denied. Insufficient permissions.');
       } else {
