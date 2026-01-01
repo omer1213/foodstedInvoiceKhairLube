@@ -452,19 +452,21 @@
         width: 80%;
         z-index: 10;
         margin: 20px;
-
+        height: 1200px !important;
+        overflow: hidden;
     }
 
     
 
     .items-table {
         width: 100%;
+        height: 350px;
         border-collapse: separate;
         border-spacing: 0;
         background: transparent;
         border: 2px solid #333;
         margin-bottom: 10px;
-
+        table-layout: fixed;
     }
 
     .items-table .items-header-row td {
@@ -514,13 +516,13 @@
     }
 
     .items-data {
-        padding: 6px 5px !important;
+        padding: 2px 5px !important;
         text-align: center;
         font-size: 11px;
         vertical-align: middle;
         border-right: 1px solid #333 !important;
         height: auto;
-        min-height: 20px;
+        min-height: 15px;
     }
 
     .items-data:last-child {
@@ -533,8 +535,8 @@
 
     .items-data-row td {
         height: auto !important;
-        min-height: 20px !important;
-        padding: 6px 5px !important;
+        min-height: 15px !important;
+        padding: 2px 5px !important;
     }
 
     /* Footer Section */
