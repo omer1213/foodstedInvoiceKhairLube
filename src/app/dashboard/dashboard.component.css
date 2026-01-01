@@ -475,7 +475,7 @@
         color: white !important;
         font-weight: bold !important;
         padding: 4px 3px !important;
-        border-right: 1px solid #333 !important;
+        border-right: 2px solid #333 !important;
         border-bottom: 1px solid #333 !important;
         text-align: center !important;
         font-size: 9px;
@@ -486,14 +486,48 @@
         color-adjust: exact !important;
     }
 
+    .items-table .items-header-row td:nth-child(1) {
+        width: 5%; /* POS - shrink */
+    }
+
     .items-table .items-header-row td:nth-child(2) {
         padding: 2px 1px !important;
         line-height: 1.05;
+        width: 15%; /* Code - increase */
     }
 
     .items-table .items-header-row td:nth-child(3) {
         text-align: left !important;
         padding-left: 8px !important;
+        width: 25%; /* Description - increase */
+    }
+
+    .items-table .items-header-row td:nth-child(4) {
+        width: 8%; /* Unit - shrink */
+    }
+
+    .items-table .items-header-row td:nth-child(5) {
+        width: 8%; /* Qty - shrink */
+    }
+
+    .items-table .items-header-row td:nth-child(6) {
+        width: 8%; /* Price - shrink */
+    }
+
+    .items-table .items-header-row td:nth-child(7) {
+        width: 10%; /* Amount - shrink */
+    }
+
+    .items-table .items-header-row td:nth-child(8) {
+        width: 8%; /* Discount - shrink */
+    }
+
+    .items-table .items-header-row td:nth-child(9) {
+        width: 8%; /* VAT Rate - shrink */
+    }
+
+    .items-table .items-header-row td:nth-child(10) {
+        width: 10%; /* Net Amount - shrink */
     }
 
     .items-table .items-header-row td .arabic-text {
