@@ -100,7 +100,7 @@
         <tr >
           <td class="buyer-content">
             <div class="contact-info">
-              <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{ invoiceData?.invoice?.party_displayname || 'Omer Yahya' }}</span><span class="field-arabic">الاسم</span></div>
+              <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{ invoiceData?.invoice?.party_displayname || 'Omer Yahya' }} / {{ invoiceData?.invoice?.party_displayname_ar || 'شركة النهدي الطبية' }}</span><span class="field-arabic">الاسم</span></div>
               <div class="info-row"><span class="field-label">Building No</span><span class="field-value">{{ invoiceData?.invoice?.party_building || '7182' }}</span><span class="field-arabic">رقم المبنى</span></div>
               <div class="info-row"><span class="field-label">Street</span><span class="field-value">{{ invoiceData?.invoice?.party_street || 'المملكة العربية السعودية' }}</span><span class="field-arabic">الشارع</span></div>
               <div class="info-row"><span class="field-label">District</span><span class="field-value">{{ invoiceData?.invoice?.party_district || 'المملكة العربية' }}</span><span class="field-arabic">الحي</span></div>
@@ -196,7 +196,7 @@
       <!-- Amount in words row -->
       <div class="amount-words-row">
         <div class="amount-words-left">Amount in words</div>
-        <div class="amount-words-center">thirteen thousand only</div>
+        <div class="amount-words-center">{{ getNetAmountInWords() }}</div>
         <div class="amount-words-right">المبلغ بالكلمات</div>
       </div>
       <!-- Bank details and signatures -->

@@ -14,6 +14,7 @@ export interface InvoiceItem {
   invoiced_totalvat: string;
   invoiced_netprice: string;
   item_id: string;
+  isEmpty?: boolean; // Optional property for empty rows
 }
 
 export interface Invoice {
