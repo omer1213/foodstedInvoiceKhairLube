@@ -1,0 +1,217 @@
+<!-- Dashboard Header -->
+<header class="dashboard-header">
+  <div class="header-content">
+    <div class="header-left">
+      <img src="/logoMain.png" alt="Khair Lubricants Company" class="header-logo">
+      <div class="header-text">
+        <h1 class="company-title">Khair Lubricants Company</h1>
+        <p class="system-title">Invoice Management System</p>
+      </div>
+    </div>
+    <div class="header-right">
+      @if (user()) {
+        <div class="user-info">
+          <div class="user-welcome">
+            <span class="welcome-text">Welcome,</span>
+            <span class="user-name">{{ user()?.default_supplier_displayname }}</span>
+          </div>
+          <button class="logout-button" (click)="logout()">
+            <svg fill="currentColor" viewBox="0 0 20 20" class="logout-icon">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+            </svg>
+            Logout
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>
+
+<!-- Main Dashboard Content -->
+<div class="main-content">
+  <div class="dashboard-welcome">
+    <h2 class="welcome-heading">Invoice Printing System</h2>
+    <p class="welcome-description">Generate and print professional invoices for Khair Lubricants Company</p>
+  </div>
+  
+  <div class="action-section">
+    <div class="action-buttons">
+      <button (click)="printContent()" class="print-button">
+        <svg fill="currentColor" viewBox="0 0 20 20" class="print-icon">
+          <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM5 14H4v-2h1v2zm1 0v2h8v-2H6zm9 0h1v-2h-1v2z" clip-rule="evenodd" />
+        </svg>
+        Print Invoice
+      </button>
+      
+      <button (click)="navigateToItems()" class="items-button">
+        <svg fill="currentColor" viewBox="0 0 20 20" class="items-icon">
+          <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+        </svg>
+        Item List
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Print Content (Hidden on screen, visible when printing) -->
+<div class="print-only">
+  <div class="print-container">
+    <img src="/printPic.png" alt="Print Image" class="print-image">
+    <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div>
+    
+    <!-- Invoice Details Section -->
+    <div class="invoice-details">
+      <table class="details-table">
+        <tr>
+          <td class="label">Invoice No</td>
+          <td class="value">KHAI-IN-000164</td>
+          <td class="arabic-label">رقم الفاتورة</td>
+        </tr>
+        <tr>
+          <td class="label">Invoice Date</td>
+          <td class="value">30/11/2025</td>
+          <td class="arabic-label">تاريخ الفاتورة</td>
+        </tr>
+        <tr>
+          <td class="label">Due Date</td>
+          <td class="value">30/11/2025</td>
+          <td class="arabic-label">تاريخ الاستحقاق</td>
+        </tr>
+        <tr>
+          <td class="label">P.O No</td>
+          <td class="value">Verbal</td>
+          <td class="arabic-label">من رقم</td>
+        </tr>
+        <tr>
+          <td class="label">Payment Mode</td>
+          <td class="value">Credit</td>
+          <td class="arabic-label">طريقة الدفع</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Buyer/Seller Section -->
+    <div class="buyer-seller-section">
+      <table class="buyer-seller-table">
+        <tr class="header-row">
+          <td class="buyer-header"><span class="english-text">Buyer</span><span class="arabic-text">المشتري</span></td>
+          <td class="seller-header"><span class="english-text">Seller</span><span class="arabic-text">بائع</span></td>
+        </tr>
+        <tr >
+          <td class="buyer-content">
+            <div class="contact-info">
+              <div class="info-row"><span class="field-label">Name</span><span class="field-value">Omer Yahya</span><span class="field-arabic">الاسم</span></div>
+              <div class="info-row"><span class="field-label">Building No</span><span class="field-value">7182</span><span class="field-arabic">رقم المبنى</span></div>
+              <div class="info-row"><span class="field-label">Street</span><span class="field-value">المملكة العربية السعودية</span><span class="field-arabic">الشارع</span></div>
+              <div class="info-row"><span class="field-label">District</span><span class="field-value">المملكة العربية</span><span class="field-arabic">الحي</span></div>
+              <div class="info-row"><span class="field-label">City</span><span class="field-value">جدة</span><span class="field-arabic">المدينة</span></div>
+              <div class="info-row"><span class="field-label">Country</span><span class="field-value">المملكة العربية السعودية</span><span class="field-arabic">الدولة</span></div>
+              <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">32242</span><span class="field-arabic">الرمز البريدي</span></div>
+              <div class="info-row"><span class="field-label">Add No</span><span class="field-value">1212</span><span class="field-arabic">الرمز الإضافي</span></div>
+              <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">311480066300003</span><span class="field-arabic">الرقم الضريبي</span></div>
+              <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">0122xxxxxx63</span><span class="field-arabic">السجل التجاري</span></div>
+            </div>
+          </td>
+          <td class="seller-content">
+            <div class="contact-info">
+              <div class="info-row"><span class="field-label">Name</span><span class="field-value">Ansar AL Jazeer</span><span class="field-arabic">الاسم</span></div>
+              <div class="info-row"><span class="field-label">Building No</span><span class="field-value">7716</span><span class="field-arabic">رقم المبنى</span></div>
+              <div class="info-row"><span class="field-label">Street</span><span class="field-value">المملكة العربية السعودية</span><span class="field-arabic">الشارع</span></div>
+              <div class="info-row"><span class="field-label">District</span><span class="field-value">المملكة العربية</span><span class="field-arabic">الحي</span></div>
+              <div class="info-row"><span class="field-label">City</span><span class="field-value">جدة</span><span class="field-arabic">المدينة</span></div>
+              <div class="info-row"><span class="field-label">Country</span><span class="field-value">المملكة العربية السعودية</span><span class="field-arabic">الدولة</span></div>
+              <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">32242</span><span class="field-arabic">الرمز البريدي</span></div>
+              <div class="info-row"><span class="field-label">Add No</span><span class="field-value">4580</span><span class="field-arabic">الرمز الإضافي</span></div>
+              <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">311480066300003</span><span class="field-arabic">الرقم الضريبي</span></div>
+              <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">0122xxxxxx63</span><span class="field-arabic">السجل التجاري</span></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Invoice Items Section -->
+    <div class="invoice-items-section">
+      <table class="items-table">
+        <tr class="items-header-row">
+          <td class="items-header">POS<br><span >نقاط البيع</span></td>
+          <td class="items-header">Code<br><span >كتيرة</span></td>
+          <td class="items-header">Item Description<br><span >وصف السلعة</span></td>
+          <td class="items-header">Unit<br><span>وحدة</span></td>
+          <td class="items-header">Invoiced<br>Qty<br><span >الكمية الطلبوبة<br>12.00</span></td>
+          <td class="items-header">Price<br><span >سعر</span></td>
+          <td class="items-header">Invoiced<br>Amount<br><span >كمية</span></td>
+          <td class="items-header">Invoiced<br>Unit<br>Discount<br><span >خصم الوحدة المطلوبة</span></td>
+          <td class="items-header">POS VAT<br>Rate<br><span >معدل ضريبة القيمة المضافة</span></td>
+          <td class="items-header">Net Amt<br><span >صافي المبلغ</span></td>
+        </tr>
+        <tr class="items-data-row">
+          <td class="items-data">1.</td>
+          <td class="items-data">13080261408</td>
+          <td class="items-data">Turnilion HV 3 (1L)</td>
+          <td class="items-data">Liter</td>
+          <td class="items-data">12.00</td>
+          <td class="items-data">250.00</td>
+          <td class="items-data">3,000.00</td>
+          <td class="items-data">0.00</td>
+          <td class="items-data">450.00</td>
+          <td class="items-data">3,450.00</td>
+        </tr>
+      </table>
+      
+      <!-- Footer Section -->
+      <table class="invoice-footer-table">
+        <tr>
+          <td class="footer-qr" rowspan="4">
+            <div class="qr-code">[QR CODE]</div>
+          </td>
+          <td class="footer-stamp" rowspan="4">
+            <div class="remarks-label">Remarks / ملاحظات :</div>
+            <div class="stamp-label">Stamp / ختم :</div>
+          </td>
+          <td class="footer-total-label">Total Qty / الكمية الكلية</td>
+          <td class="footer-total-value">12</td>
+          <td class="footer-amount-label">Amount / كمية</td>
+          <td class="footer-amount-value">3,000.00</td>
+        </tr>
+        <tr>
+          <td class="footer-spacer"></td>
+          <td class="footer-spacer"></td>
+          <td class="footer-amount-label">Invoiced Unit Discount / خصم الوحدة المطلوبة</td>
+          <td class="footer-amount-value">0.00</td>
+        </tr>
+        <tr>
+          <td class="footer-spacer"></td>
+          <td class="footer-spacer"></td>
+          <td class="footer-amount-label">Vat Amount / قيمة الضريبة</td>
+          <td class="footer-amount-value">450.00</td>
+        </tr>
+        <tr>
+          <td class="footer-spacer"></td>
+          <td class="footer-spacer"></td>
+          <td class="footer-amount-label">Net Amt / صافي المبلغ</td>
+          <td class="footer-amount-value">3,450.00</td>
+        </tr>
+      </table>
+      <!-- Amount in words row -->
+      <div class="amount-words-row">
+        <div class="amount-words-left">Amount in words</div>
+        <div class="amount-words-center">thirteen thousand only</div>
+        <div class="amount-words-right">المبلغ بالكلمات</div>
+      </div>
+      <!-- Bank details and signatures -->
+      <div class="bank-signatures">
+        <div class="bank-left">
+          <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">KHAIR LUBRICANTS COMPANY</span><span class="bank-ar">اسم الحساب</span></div>
+          <div class="bank-row"><span class="bank-label">Bank Name</span><span class="bank-value">Alrajhi Bank</span><span class="bank-ar">اسم البنك</span></div>
+          <div class="bank-row"><span class="bank-label">Account No</span><span class="bank-value">452000010006080122276</span><span class="bank-ar">رقم الحساب</span></div>
+          <div class="bank-row"><span class="bank-label">IBAN No</span><span class="bank-value">SA7080000452608010122276</span><span class="bank-ar">ايبان</span></div>
+        </div>
+        <div class="bank-right">
+          <div class="sig-line"><span>Salesman / بائع :</span><span class="sig-underscore">_______________________</span></div>
+          <div class="sig-line"><span>Receiver / المستلم :</span><span class="sig-underscore">_______________________</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

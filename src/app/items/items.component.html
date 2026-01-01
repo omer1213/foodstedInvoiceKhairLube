@@ -1,0 +1,161 @@
+<!-- Items Header -->
+<header class="items-header">
+  <div class="header-content">
+    <div class="header-left">
+      <button class="back-button" (click)="goBack()">
+        <svg fill="currentColor" viewBox="0 0 20 20" class="back-icon">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L4.414 9H17a1 1 0 110 2H4.414l5.293 5.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Back to Dashboard
+      </button>
+      <div class="header-text">
+        <img src="/logoMain.png" alt="Khair Lubricants Company" class="header-logo">
+        <div>
+          <h1 class="page-title">Items Inventory</h1>
+          <p class="page-subtitle">Khair Lubricants Company</p>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      @if (user()) {
+        <div class="user-info">
+          <div class="user-welcome">
+            <span class="welcome-text">Welcome,</span>
+            <span class="user-name">{{ user()?.default_supplier_displayname }}</span>
+          </div>
+          <button class="logout-button" (click)="logout()">
+            <svg fill="currentColor" viewBox="0 0 20 20" class="logout-icon">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+            </svg>
+            Logout
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading items...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="error-container">
+      <div class="error-icon">⚠️</div>
+      <h2 class="error-title">Error Loading Items</h2>
+      <p class="error-message">{{ error() }}</p>
+      <button class="retry-button" (click)="loadItems()">
+        <svg fill="currentColor" viewBox="0 0 20 20" class="retry-icon">
+          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+        </svg>
+        Try Again
+      </button>
+    </div>
+  }
+
+  <!-- Items Content -->
+  @else {
+    <div class="items-content">
+      <!-- Search and Filter Controls -->
+      <div class="controls-section">
+        <div class="sort-controls">
+          <span class="sort-label">Sort by:</span>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy() === 'name'"
+            (click)="onSortChange('name')"
+          >
+            Name
+            @if (sortBy() === 'name') {
+              <svg class="sort-arrow" [class.desc]="sortOrder() === 'desc'" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            }
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy() === 'code'"
+            (click)="onSortChange('code')"
+          >
+            Code
+            @if (sortBy() === 'code') {
+              <svg class="sort-arrow" [class.desc]="sortOrder() === 'desc'" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            }
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy() === 'rate'"
+            (click)="onSortChange('rate')"
+          >
+            Price
+            @if (sortBy() === 'rate') {
+              <svg class="sort-arrow" [class.desc]="sortOrder() === 'desc'" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Items Statistics -->
+      <div class="stats-section">
+        <div class="stat-card">
+          <div class="stat-number">{{ filteredItems().length }}</div>
+          <div class="stat-label">Items Found</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{{ items().length }}</div>
+          <div class="stat-label">Total Items</div>
+        </div>
+      </div>
+
+      <!-- Items Grid -->
+      @if (filteredItems().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">📦</div>
+          <h3 class="empty-title">No items available</h3>
+          <p class="empty-message">Items will appear here once loaded</p>
+        </div>
+      } @else {
+        <div class="items-grid">
+          @for (item of filteredItems(); track item.item_id) {
+            <div class="item-card">
+              <div class="item-header">
+                <div class="item-code">{{ item.item_code || 'N/A' }}</div>
+                <div class="item-unit">{{ item.item_unit }}</div>
+              </div>
+              
+              <div class="item-body">
+                <h3 class="item-name">{{ item.item_name }}</h3>
+                
+                <div class="item-prices">
+                  <div class="price-row">
+                    <span class="price-label">Unit Price:</span>
+                    <span class="price-value">{{ formatPrice(item.item_rate) }} SAR</span>
+                  </div>
+                  <div class="price-row">
+                    <span class="price-label">Cost Price:</span>
+                    <span class="price-value cost">{{ formatPrice(item.item_cost) }} SAR</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="item-footer">
+                <div class="item-id">ID: {{ item.item_id }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</main>
