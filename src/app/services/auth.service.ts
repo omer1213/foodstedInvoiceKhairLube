@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { ModalService } from './modal.service';
 
 export interface User {
   user_id: number;
@@ -28,10 +29,12 @@ export class AuthService {
   private readonly currentUser = signal<User | null>(null);
   private readonly isAuthenticated = signal(false);
   private readonly API_URL = 'https://www.foodsted.com/khairlubricants/api/login';
+  private readonly LOGOUT_API_URL = 'https://www.foodsted.com/khairlubricants/api/logout';
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private modalService: ModalService
   ) {
     // Check if user is already logged in on service initialization
     this.checkStoredAuth();
@@ -199,6 +202,56 @@ export class AuthService {
     });
   }
 
+  async logoutUser(): Promise<void> {
+    // Show custom confirmation dialog
+    const confirmed = await this.modalService.confirm(
+      'Logout',
+      'Are you sure you want to logout?'
+    );
+    
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const token = this.getToken();
+      
+      if (!token) {
+        // If no token, just clear and redirect
+        this.clearStoredAuth();
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      // Call logout API
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+
+      const response = await firstValueFrom(
+        this.http.get<{ success: string }>(this.LOGOUT_API_URL, { headers })
+      );
+
+      // Show success message
+      if (response.success) {
+        this.modalService.success(response.success, () => {
+          // Clear storage and redirect after success message
+          this.clearStoredAuth();
+          this.router.navigate(['/login']);
+        });
+      } else {
+        this.clearStoredAuth();
+        this.router.navigate(['/login']);
+      }
+    } catch (error: any) {
+      // Even if API fails, clear local storage and redirect
+      this.clearStoredAuth();
+      this.router.navigate(['/login']);
+    }
+  }
+
+  // Keep old logout method for backward compatibility
   logout(): void {
     this.clearStoredAuth();
     this.router.navigate(['/login']);

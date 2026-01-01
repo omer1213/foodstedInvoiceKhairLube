@@ -95,7 +95,7 @@ export class ItemsService {
         // Clear all authentication data and redirect to login
         localStorage.clear();
         sessionStorage.clear();
-        this.authService.logout();
+        this.router.navigate(['/login']);
         throw new Error('Session expired. Please login again.');
       } else if (error.status === 403) {
         throw new Error('Access denied. Insufficient permissions.');

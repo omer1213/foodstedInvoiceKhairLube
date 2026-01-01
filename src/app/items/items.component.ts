@@ -104,7 +104,7 @@ export class ItemsComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logoutUser();
   }
 
   formatPrice(price: string): string {

@@ -1,0 +1,7 @@
+<div class="toast-overlay" [class.visible]="isVisible()">
+  <div class="toast-container">
+    <div class="toast-icon">✓</div>
+    <p class="toast-message">{{ message() }}</p>
+    <button class="toast-close" (click)="close()">×</button>
+  </div>
+</div>
