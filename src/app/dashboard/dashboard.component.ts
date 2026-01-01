@@ -51,5 +51,50 @@ export class DashboardComponent {
     this.authService.logoutUser();
   }
 
+  // Calculate total quantity from all items
+  getTotalQty(): string {
+    if (!this.invoiceData?.invoiced) return '0';
+    const total = this.invoiceData.invoiced.reduce((sum, item) => {
+      return sum + parseFloat(item.invoiced_qty || '0');
+    }, 0);
+    return total.toFixed(2);
+  }
+
+  // Calculate total amount (without VAT)
+  getTotalAmount(): string {
+    if (!this.invoiceData?.invoiced) return '0.00';
+    const total = this.invoiceData.invoiced.reduce((sum, item) => {
+      return sum + parseFloat(item.invoiced_pricewithoutdiscounttax || '0');
+    }, 0);
+    return total.toFixed(2);
+  }
+
+  // Calculate total discount
+  getTotalDiscount(): string {
+    if (!this.invoiceData?.invoiced) return '0.00';
+    const total = this.invoiceData.invoiced.reduce((sum, item) => {
+      return sum + parseFloat(item.invoiced_totaldiscount || '0');
+    }, 0);
+    return total.toFixed(2);
+  }
+
+  // Calculate total VAT amount
+  getTotalVat(): string {
+    if (!this.invoiceData?.invoiced) return '0.00';
+    const total = this.invoiceData.invoiced.reduce((sum, item) => {
+      return sum + parseFloat(item.invoiced_totalvat || '0');
+    }, 0);
+    return total.toFixed(2);
+  }
+
+  // Calculate net total amount (with VAT)
+  getNetAmount(): string {
+    if (!this.invoiceData?.invoiced) return '0.00';
+    const total = this.invoiceData.invoiced.reduce((sum, item) => {
+      return sum + parseFloat(item.invoiced_netprice || '0');
+    }, 0);
+    return total.toFixed(2);
+  }
+
 
 }
