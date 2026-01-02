@@ -627,7 +627,7 @@
 
     .footer-total-value-abs {
         position: absolute;
-        left: 280px;
+        left: 265px;
         top: 0;
         font-weight: bold;
         font-size: 11px;
@@ -739,31 +739,7 @@
         padding: 2px 4px !important;
     }
 
-    .footer-total-label {
-        font-weight: bold;
-        text-align: left;
-        width: 150px;
-        text-indent: -8px !important;
-        padding-left: 0px !important;
-    }
 
-    .invoice-footer-table .footer-total-label {
-        text-indent: -8px !important;
-        padding-left: 0px !important;
-        margin-left: -8px !important;
-        transform: translateX(-8px) !important;
-    }
-
-    @media print {
-        .print-only .invoice-footer-table td.footer-total-label {
-            text-indent: -8px !important;
-            padding-left: 0px !important;
-            margin-left: -8px !important;
-            transform: translateX(-8px) !important;
-            position: relative !important;
-            left: -8px !important;
-        }
-    }
 
     /* Bank details and signatures section */
     .bank-signatures {
@@ -845,31 +821,7 @@
         display: flex !important;
     }
 
-    .footer-total-value {
-        font-weight: bold;
-        text-align: center;
-        width: 50px;
-        text-indent: -8px !important;
-        padding-left: 0px !important;
-    }
 
-    .invoice-footer-table .footer-total-value {
-        text-indent: -8px !important;
-        padding-left: 0px !important;
-        margin-left: -8px !important;
-        transform: translateX(-8px) !important;
-    }
-
-    @media print {
-        .print-only .invoice-footer-table td.footer-total-value {
-            text-indent: -8px !important;
-            padding-left: 0px !important;
-            margin-left: -8px !important;
-            transform: translateX(-8px) !important;
-            position: relative !important;
-            left: -8px !important;
-        }
-    }
 
     .footer-amount-label {
         font-weight: bold;
