@@ -446,135 +446,162 @@
     }
 /* starting of the table */
     /* Invoice Items Section */
-    .invoice-items-section {
-        position: absolute;
-        top: 45%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        z-index: 10;
-        margin: 20px;
-        height: 1200px !important;
-        overflow: hidden;
-    }
+ /* Invoice Items Section */
+.invoice-items-section {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    z-index: 10;
+    margin: 20px;
+    height: 1200px !important;
+    overflow: hidden;
+}
 
-    
+.items-table-wrapper {
+    height: 360px;
+    border: 2px solid #333;
+    overflow: hidden;
+    background: transparent;
+    position: relative;
+}
 
-    .items-table {
-        width: 100%;
-        height: 360px;
-        border-collapse: separate;
-        border-spacing: 0;
-        background: transparent;
-        border: 2px solid #333;
-        margin-bottom: 10px;
-        table-layout: fixed;
-    }
+/* BACKGROUND GRID TABLE - ALWAYS VISIBLE FULL HEIGHT */
+.background-grid-table {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    z-index: 0;
+    background: transparent;
+}
 
-    .items-table .items-header-row td {
-        background-color: #2299b3 !important;
-        background: #2299b3 !important;
-        color: white !important;
-        font-weight: bold !important;
-        padding: 4px 3px !important;
-        border-right: 2px solid #333 !important;
-        border-bottom: 1px solid #333 !important;
-        text-align: center !important;
-        font-size: 9px;
-        line-height: 1.1;
-        vertical-align: middle !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-    }
+.background-grid-table tr {
+    height: 100%;
+}
 
-    .items-table .items-header-row td:nth-child(1) {
-        width: 5%; /* POS - shrink */
-    }
+.background-grid-table td {
+    border-right: 1px solid #333;
+    background: transparent;
+    padding: 0;
+}
 
-    .items-table .items-header-row td:nth-child(2) {
-        padding: 2px 1px !important;
-        line-height: 1.05;
-        width: 15%; /* Code - increase */
-    }
+.background-grid-table td:last-child {
+    border-right: none;
+}
 
-    .items-table .items-header-row td:nth-child(3) {
-        text-align: left !important;
-        padding-left: 8px !important;
-        width: 25%; /* Description - increase */
-    }
+/* DATA TABLE - ON TOP OF BACKGROUND */
+.items-table {
+    position: relative;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background: transparent;
+    border: none;
+    margin-bottom: 0;
+    table-layout: fixed;
+    z-index: 1;
+}
 
-    .items-table .items-header-row td:nth-child(4) {
-        width: 8%; /* Unit - shrink */
-    }
+.items-table .items-header-row td {
+    background-color: #2299b3 !important;
+    background: #2299b3 !important;
+    color: white !important;
+    font-weight: bold !important;
+    padding: 4px 3px !important;
+    border-right: 2px solid #333 !important;
+    border-bottom: 2px solid #333 !important;
+    text-align: center !important;
+    font-size: 9px;
+    line-height: 1.1;
+    vertical-align: middle !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+}
 
-    .items-table .items-header-row td:nth-child(5) {
-        width: 8%; /* Qty - shrink */
-    }
+.items-table .items-header-row td:nth-child(1) {
+    width: 5%;
+}
 
-    .items-table .items-header-row td:nth-child(6) {
-        width: 8%; /* Price - shrink */
-    }
+.items-table .items-header-row td:nth-child(2) {
+    padding: 2px 1px !important;
+    line-height: 1.05;
+    width: 15%;
+}
 
-    .items-table .items-header-row td:nth-child(7) {
-        width: 10%; /* Amount - shrink */
-    }
+.items-table .items-header-row td:nth-child(3) {
+    text-align: left !important;
+    padding-left: 8px !important;
+    width: 25%;
+}
 
-    .items-table .items-header-row td:nth-child(8) {
-        width: 8%; /* Discount - shrink */
-    }
+.items-table .items-header-row td:nth-child(4) {
+    width: 8%;
+}
 
-    .items-table .items-header-row td:nth-child(9) {
-        width: 8%; /* VAT Rate - shrink */
-    }
+.items-table .items-header-row td:nth-child(5) {
+    width: 8%;
+}
 
-    .items-table .items-header-row td:nth-child(10) {
-        width: 10%; /* Net Amount - shrink */
-    }
+.items-table .items-header-row td:nth-child(6) {
+    width: 8%;
+}
 
-    .items-table .items-header-row td .arabic-text {
-        font-size: 7px;
-        display: block;
-        line-height: 1;
-        margin-top: 1px;
-    }
+.items-table .items-header-row td:nth-child(7) {
+    width: 10%;
+}
 
-    .items-table .items-header-row td:last-child {
-        border-right: none !important;
-    }
+.items-table .items-header-row td:nth-child(8) {
+    width: 8%;
+}
 
-    .items-table tr:first-child td {
-        padding-top: 8px !important;
-    }
+.items-table .items-header-row td:nth-child(9) {
+    width: 8%;
+}
 
-    .items-table tr:last-child td {
-        padding-bottom: 8px !important;
-    }
+.items-table .items-header-row td:nth-child(10) {
+    width: 10%;
+}
 
-    .items-data {
-        padding: 2px 5px !important;
-        text-align: left;
-        font-size: 11px;
-        vertical-align: middle;
-        border-right: 1px solid #333 !important;
-        height: auto;
-        min-height: 15px;
-    }
+.items-table .items-header-row td .arabic-text {
+    font-size: 7px;
+    display: block;
+    line-height: 1;
+    margin-top: 1px;
+}
 
-    .items-data:last-child {
-        border-right: none !important;
-    }
+.items-table .items-header-row td:last-child {
+    border-right: none !important;
+}
 
-    .items-data-row {
-        border-bottom: 1px solid #333 !important;
-    }
+.items-data {
+    padding: 1px 5px !important;
+    text-align: left;
+    font-size: 11px;
+    vertical-align: top;
+    border-right: none !important; /* Remove borders - background table shows them */
+    height: auto !important;
+    background: transparent !important;
+}
 
-    .items-data-row td {
-        height: auto !important;
-        min-height: 15px !important;
-        padding: 2px 5px !important;
-    }
+.items-data-row {
+    border-bottom: none !important;
+    height: auto !important;
+    background: transparent !important;
+}
 
+.items-data-row td {
+    height: auto !important;
+    padding: 1px 5px !important;
+    background: transparent !important;
+}
     /* end of the table */
 
     /* Footer Section */
