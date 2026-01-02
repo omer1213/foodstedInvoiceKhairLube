@@ -297,6 +297,12 @@
       </div>
 
       <!-- Footer Section -->
+      <!-- Absolute positioned Total Qty elements -->
+      <div class="total-qty-container">
+        <div class="footer-total-label-abs">Total Qty / إجمالي الكمية</div>
+        <div class="footer-total-value-abs">{{ getTotalQty() }}</div>
+      </div>
+      
       <table class="invoice-footer-table">
         <tr>
           <td class="footer-qr" rowspan="4">
@@ -306,8 +312,8 @@
             <div class="remarks-label">Remarks / ملاحظات :</div>
             <div class="stamp-label">Stamp / ختم :</div>
           </td>
-          <td class="footer-total-label">Total Qty / إجمالي الكمية</td>
-          <td class="footer-total-value">{{ getTotalQty() }}</td>
+          <td class="footer-spacer"></td>
+          <td class="footer-spacer"></td>
           <td class="footer-amount-label">Amount / كمية</td>
           <td class="footer-amount-value">{{ getTotalAmount() }}</td>
         </tr>
