@@ -329,7 +329,7 @@
         top: 26%;
         left: 50%;
         transform: translateX(-50%);
-        width: 80%;
+        width: 635px;
         z-index: 10;
         margin: 20px;
     }
@@ -430,9 +430,11 @@
         text-align: center;
         font-weight: 500;
         font-size: 10px;
-        white-space: nowrap;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.2;
+        max-height: 2.4em;
         overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .field-arabic {
@@ -442,7 +444,7 @@
         min-width: 80px;
         text-align: right;
     }
-
+/* starting of the table */
     /* Invoice Items Section */
     .invoice-items-section {
         position: absolute;
@@ -572,6 +574,8 @@
         min-height: 15px !important;
         padding: 2px 5px !important;
     }
+
+    /* end of the table */
 
     /* Footer Section */
     .invoice-footer-table {

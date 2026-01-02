@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService, User } from '../services/auth.service';
 import { InvoiceService, InvoiceResponse } from '../services/invoice.service';
 
@@ -11,14 +11,60 @@ import { InvoiceService, InvoiceResponse } from '../services/invoice.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   invoiceData: InvoiceResponse | null = null;
+  isPrintMode: boolean = false;
+  printUserId: string = '';
+  printInvoiceId: string = '';
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private invoiceService: InvoiceService
   ) {}
+
+  ngOnInit() {
+    // Check if this is a print URL access
+    this.printUserId = this.route.snapshot.paramMap.get('userid') || '';
+    this.printInvoiceId = this.route.snapshot.paramMap.get('invoiceid') || '';
+    
+    if (this.printUserId && this.printInvoiceId) {
+      // This is print URL access
+      this.isPrintMode = true;
+      console.log('Print mode detected - User ID:', this.printUserId, 'Invoice ID:', this.printInvoiceId);
+      
+      // Check authentication for print access
+      if (this.validatePrintAccess()) {
+        // Auto-print with the URL invoice ID
+        this.printContentWithId(this.printInvoiceId);
+      } else {
+        // Redirect to login if not authenticated
+        this.router.navigate(['/login']);
+        return;
+      }
+    }
+    
+    // Regular dashboard initialization code can go here if needed
+  }
+
+  validatePrintAccess(): boolean {
+    const storedUserId = localStorage.getItem('khair_user_id');
+    const token = localStorage.getItem('khair_token');
+
+    if (!token || !storedUserId) {
+      console.log('Print access denied: No authentication');
+      return false;
+    }
+
+    if (this.printUserId !== storedUserId) {
+      console.log('Print access denied: User ID mismatch');
+      return false;
+    }
+
+    console.log('Print access granted for user:', this.printUserId);
+    return true;
+  }
 
   get user() {
     return this.authService.getCurrentUser();
@@ -26,12 +72,23 @@ export class DashboardComponent {
 
   printContent() {
     const invoiceId = '50985';
+    this.printContentWithId(invoiceId);
+  }
+
+  printContentWithId(invoiceId: string) {
+    console.log('Printing invoice:', invoiceId);
     
     this.invoiceService.getInvoiceDetails(invoiceId).subscribe({
       next: (response) => {
         this.invoiceData = response;
         setTimeout(() => {
           window.print();
+          // Close window if it was opened from print URL
+          if (this.isPrintMode) {
+            setTimeout(() => {
+              window.close();
+            }, 2000);
+          }
         }, 100); // Small delay to ensure DOM updates
       },
       error: (error) => {

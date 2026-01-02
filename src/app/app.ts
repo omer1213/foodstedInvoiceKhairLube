@@ -36,24 +36,12 @@ export class App implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    // Register modals with the modal service
+    // Just register modals - NO redirection logic
     if (this.confirmModal) {
       this.modalService.setConfirmModal(this.confirmModal);
     }
     if (this.successModal) {
       this.modalService.setSuccessModal(this.successModal);
-    }
-
-    // Check if user is authenticated on app initialization
-    const isAuthenticated = this.authService.getIsAuthenticated()();
-    const currentRoute = this.router.url;
-    
-    if (isAuthenticated && (currentRoute === '/login' || currentRoute === '/')) {
-      // If authenticated and on login page, redirect to dashboard
-      this.router.navigate(['/dashboard']);
-    } else if (!isAuthenticated && currentRoute !== '/login') {
-      // If not authenticated and not on login page, redirect to login
-      this.router.navigate(['/login']);
     }
   }
 }
