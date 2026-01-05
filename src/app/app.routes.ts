@@ -9,6 +9,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'items', component: ItemsComponent, canActivate: [AuthGuard] },
-  { path: 'print/:userid/:invoiceid', component: DashboardComponent },
+  { path: 'invoiceprint/:invoiceid', component: DashboardComponent },
   { path: '**', redirectTo: '/login' }
 ];

@@ -14,7 +14,7 @@ import { InvoiceService, InvoiceResponse } from '../services/invoice.service';
 export class DashboardComponent implements OnInit {
   invoiceData: InvoiceResponse | null = null;
   isPrintMode: boolean = false;
-  printUserId: string = '';
+  // printUserId: string = '';
   printInvoiceId: string = '';
 
   constructor(
@@ -26,13 +26,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // Check if this is a print URL access
-    this.printUserId = this.route.snapshot.paramMap.get('userid') || '';
+    // this.printUserId = this.route.snapshot.paramMap.get('userid') || '';
     this.printInvoiceId = this.route.snapshot.paramMap.get('invoiceid') || '';
     
-    if (this.printUserId && this.printInvoiceId) {
+    if ( this.printInvoiceId) {
       // This is print URL access
       this.isPrintMode = true;
-      console.log('Print mode detected - User ID:', this.printUserId, 'Invoice ID:', this.printInvoiceId);
+      console.log( 'Invoice ID:', this.printInvoiceId);
       
       // Check authentication for print access
       if (this.validatePrintAccess()) {
@@ -49,26 +49,26 @@ export class DashboardComponent implements OnInit {
   }
 
   validatePrintAccess(): boolean {
-    const storedUserId = localStorage.getItem('khair_user_id');
+    // const storedUserId = localStorage.getItem('khair_user_id');
     const token = localStorage.getItem('khair_token');
 
-    if (!token || !storedUserId) {
-      console.log('Print access denied: No authentication');
-      return false;
-    }
+    // if (!token || !storedUserId) {
+    //   console.log('Print access denied: No authentication');
+    //   return false;
+    // }
 
-    if (this.printUserId !== storedUserId) {
-      console.log('Print access denied: User ID mismatch');
-      return false;
-    }
+    // if (this.printUserId !== storedUserId) {
+    //   console.log('Print access denied: User ID mismatch');
+    //   return false;
+    // }
 
-    console.log('Print access granted for user:', this.printUserId);
+    // console.log('Print access granted for user:', this.printUserId);
     return true;
   }
 
-  get user() {
-    return this.authService.getCurrentUser();
-  }
+  // get user() {
+  //   return this.authService.getCurrentUser();
+  // }
 
   printContent() {
     const invoiceId = '50985';

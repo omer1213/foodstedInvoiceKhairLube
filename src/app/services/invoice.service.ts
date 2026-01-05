@@ -39,6 +39,7 @@ export interface Invoice {
   party_crnum: string;
   invoice_id: number;
   branch_id: string;
+  cmp_id: string;
 }
 
 export interface InvoiceResponse {
@@ -51,26 +52,35 @@ export interface InvoiceResponse {
   providedIn: 'root'
 })
 export class InvoiceService {
-  private apiUrl = 'https://www.foodsted.com/khairlubricants/api/get_invoice';
+  // production
+  private apiUrl = 'https://www.foodsted.com/khairlubricants/get_invoice';
+
+  // following is for the local
+    // private apiUrl = 'https://www.foodsted.com/khairlubricants/api/get_invoice';
 
   constructor(private http: HttpClient) {}
 
   getInvoiceDetails(invoiceId: string): Observable<InvoiceResponse> {
     const token = localStorage.getItem('khair_token');
-    const userId = localStorage.getItem('khair_user_id');
+    // const userId = localStorage.getItem('khair_user_id');
 
-    if (!token || !userId) {
-      throw new Error('Authentication required');
-    }
+    // if (!token || !userId) {
+    //   throw new Error('Authentication required');
+    // }
 
     const formData = new FormData();
     formData.append('invoice_id', invoiceId);
-    formData.append('user_id', userId);
+    // formData.append('user_id', userId);
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.post<InvoiceResponse>(this.apiUrl, formData, { headers });
+    return this.http.get<InvoiceResponse>(this.apiUrl+'?invoice_id='+invoiceId);
+
+    // followng will be sued in the lcoal systemr and the above will be sued in the producttion environment
+
+      // return this.http.get<InvoiceResponse>(this.apiUrl+'?invoice_id='+invoiceId, { headers });
+
   }
 }

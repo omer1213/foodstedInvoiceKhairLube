@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="header-right">
-      @if (user()) {
+      <!-- @if (user()) {
       <div class="user-info">
         <div class="user-welcome">
           <span class="welcome-text">Welcome,</span>
@@ -24,7 +24,8 @@
           Logout
         </button>
       </div>
-      }
+      } -->
+      
     </div>
   </div>
 </header>
@@ -38,14 +39,14 @@
 
   <div class="action-section">
     <div class="action-buttons">
-      <button (click)="printContent()" class="print-button">
+      <!-- <button (click)="printContent()" class="print-button">
         <svg fill="currentColor" viewBox="0 0 20 20" class="print-icon">
           <path fill-rule="evenodd"
             d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM5 14H4v-2h1v2zm1 0v2h8v-2H6zm9 0h1v-2h-1v2z"
             clip-rule="evenodd" />
         </svg>
         Print Invoice
-      </button>
+      </button> -->
 
       <button (click)="navigateToItems()" class="items-button">
         <svg fill="currentColor" viewBox="0 0 20 20" class="items-icon">
@@ -62,7 +63,7 @@
 <!-- Print Content (Hidden on screen, visible when printing) -->
 <div class="print-only">
   <div class="print-container">
-    <img src="/printPic.png" alt="Print Image" class="print-image">
+    <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png" alt="Print Image" class="print-image">
     <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div>
 
     <!-- Invoice Details Section -->
