@@ -85,18 +85,18 @@
         </tr> -->
         <tr>
           <td class="label">Invoice Date</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_date | date:'dd/MM/yyyy' }}</td>
+          <td class="value">{{ invoiceData?.invoice?.invoice_date | date:'dd-MM-yyyy' }}</td>
           <td class="arabic-label">تاريخ الفاتورة</td>
         </tr>
         <tr>
           <td class="label">Due Date</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_duedate | date:'dd/MM/yyyy' }}</td>
+          <td class="value">{{ invoiceData?.invoice?.invoice_duedate | date:'dd-MM-yyyy' }}</td>
           <td class="arabic-label">تاريخ الاستحقاق</td>
         </tr>
         <tr>
           <td class="label">P.O No</td>
           <td class="value">{{ invoiceData?.invoice?.invoice_po || 'Verbal' }}</td>
-          <td class="arabic-label">من رقم</td>
+          <td class="arabic-label">ص.ب رﻗم</td>
         </tr>
         <tr>
           <td class="label">Payment Mode</td>
@@ -160,9 +160,9 @@
               <div class="info-row"><span class="field-label">Country</span><span class="field-value">المملكة العربية
                   السعودية</span><span class="field-arabic">الدولة</span></div>
               <div class="info-row"><span class="field-label">Postal Code</span><span
-                  class="field-value">32434</span><span class="field-arabic">الرمز الاضافي</span></div>
+                  class="field-value">32434</span><span class="field-arabic">الرمز البريدي </span></div>
               <div class="info-row"><span class="field-label">Add No</span><span class="field-value">4739</span><span
-                  class="field-arabic">الرمز الإضافي</span></div>
+                  class="field-arabic">الرمز الاضافي </span></div>
               <div class="info-row"><span class="field-label">VAT No.</span><span
                   class="field-value">311480066300003</span><span class="field-arabic">الرقم الضريبي</span></div>
               <div class="info-row"><span class="field-label">C.R No</span><span
@@ -314,25 +314,25 @@
           </td>
           <td class="footer-spacer"></td>
           <td class="footer-spacer"></td>
-          <td class="footer-amount-label">Amount / كمية</td>
+          <td class="footer-amount-label">Amount / كمية :</td>
           <td class="footer-amount-value">{{ getTotalAmount() }}</td>
         </tr>
         <tr>
           <td class="footer-spacer"></td>
           <td class="footer-spacer"></td>
-          <td class="footer-amount-label">Discount / تخفيض</td>
+          <td class="footer-amount-label">Discount / تخفيض :</td>
           <td class="footer-amount-value">{{ getTotalDiscount() }}</td>
         </tr>
         <tr>
           <td class="footer-spacer"></td>
           <td class="footer-spacer"></td>
-          <td class="footer-amount-label">VAT / ضريبة القيمة المضافة</td>
+          <td class="footer-amount-label">VAT / ضريبة القيمة المضافة :</td>
           <td class="footer-amount-value">{{ getTotalVat() }}</td>
         </tr>
         <tr>
           <td class="footer-spacer"></td>
           <td class="footer-spacer"></td>
-          <td class="footer-amount-label">Net Amt / صافي المبلغ</td>
+          <td class="footer-amount-label">Net Amt / صافي المبلغ :</td>
           <td class="footer-amount-value">{{ getNetAmount() }}</td>
         </tr>
       </table>
@@ -357,7 +357,7 @@
         <div class="bank-right">
           <div class="sig-line"><span>Salesman / بائع :</span><span
               class="sig-underscore">_______________________</span></div>
-          <div class="sig-line"><span>Receiver / المستلم :</span><span
+          <div class="sig-line"><span>Receiver / اﻟﻣﺗﻠﻘﻲ :</span><span
               class="sig-underscore">_______________________</span></div>
         </div>
       </div>

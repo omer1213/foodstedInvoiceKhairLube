@@ -230,21 +230,106 @@ export class DashboardComponent implements OnInit {
 
   // Get net amount in words
   getNetAmountInWords(): string {
-    if (!this.invoiceData?.invoiced) return 'zero only';
+    if (!this.invoiceData?.invoiced) return 'Zero Only';
     const netAmount = parseFloat(this.getNetAmount());
+    
+    if (netAmount === 0) return 'Zero Only';
     
     const wholePart = Math.floor(netAmount);
     const decimalPart = Math.round((netAmount - wholePart) * 100);
     
-    let result = this.numberToWords(wholePart);
+    let result = this.numberToWordsFormat(wholePart);
     
     if (decimalPart > 0) {
-      result += ' and ' + this.numberToWords(decimalPart) + ' cents';
-    } else {
-      result += ' only';
+      const decimalStr = decimalPart.toString().padStart(2, '0');
+      const firstDigit = decimalStr[0];
+      const secondDigit = decimalStr[1];
+      result += ' Point ' + this.digitToWord(parseInt(firstDigit)) + ' ' + this.digitToWord(parseInt(secondDigit));
+    }
+    
+    result += ' Only';
+    
+    return result;
+  }
+
+  // Convert number to words with proper formatting (commas and 'and')
+  private numberToWordsFormat(num: number): string {
+    if (num === 0) return 'Zero';
+    
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const scales = ['', 'Thousand', 'Million', 'Billion'];
+
+    const convertLessThanHundred = (n: number): string => {
+      if (n >= 20) {
+        let result = tens[Math.floor(n / 10)];
+        if (n % 10 > 0) result += '-' + ones[n % 10];
+        return result;
+      } else if (n >= 10) {
+        return teens[n - 10];
+      } else if (n > 0) {
+        return ones[n];
+      }
+      return '';
+    };
+
+    const convertHundreds = (n: number): string[] => {
+      const parts: string[] = [];
+      
+      if (n >= 100) {
+        parts.push(ones[Math.floor(n / 100)] + ' Hundred');
+        n %= 100;
+      }
+      
+      if (n > 0) {
+        parts.push(convertLessThanHundred(n));
+      }
+      
+      return parts;
+    };
+
+    const parts: string[] = [];
+    let scaleIndex = 0;
+    
+    while (num > 0) {
+      const group = num % 1000;
+      if (group > 0) {
+        const groupParts = convertHundreds(group);
+        
+        // Add scale to the last part of this group
+        if (scaleIndex > 0 && groupParts.length > 0) {
+          groupParts[groupParts.length - 1] += ' ' + scales[scaleIndex];
+        }
+        
+        // Add all parts in reverse order (since we're building from right to left)
+        for (let i = groupParts.length - 1; i >= 0; i--) {
+          parts.unshift(groupParts[i]);
+        }
+      }
+      num = Math.floor(num / 1000);
+      scaleIndex++;
+    }
+    
+    // Join with commas and replace last comma with " And "
+    let result = '';
+    for (let i = 0; i < parts.length; i++) {
+      if (i === 0) {
+        result = parts[i];
+      } else if (i === parts.length - 1) {
+        result = result + ' And ' + parts[i];
+      } else {
+        result = result + ', ' + parts[i];
+      }
     }
     
     return result;
+  }
+
+  // Helper function to convert single digits to words (capitalized)
+  private digitToWord(digit: number): string {
+    const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    return words[digit] || 'Zero';
   }
 
 
