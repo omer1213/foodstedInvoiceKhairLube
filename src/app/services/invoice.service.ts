@@ -18,7 +18,7 @@ export interface InvoiceItem {
 }
 
 export interface Invoice {
-  invoice_submittedzatca:number;
+  invoice_submittedzatca: number;
   invoice_no: string;
   invoice_date: string;
   invoice_duedate: string;
@@ -47,7 +47,8 @@ export interface InvoiceResponse {
   invoice_id: number;
   invoice: Invoice;
   invoiced: InvoiceItem[];
- branch_result: BranchResult;
+  branch_result: BranchResult;
+  qrcode_data: string;
 }
 export interface BranchResult {
   branch_id: number;
@@ -60,8 +61,12 @@ export interface BranchResult {
   branch_zcrno: string;
   branch_zname: string;
   branch_zaddno: string;
-  branch_zvatno:string;
+  branch_zvatno: string;
 }
+export interface QRCode {
+  qrcode_data: string; // Base64 ZATCA QR
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -70,11 +75,11 @@ export class InvoiceService {
   // production
   private apiUrl = 'https://www.foodsted.com/khairlubricants/get_invoice';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getInvoiceDetails(invoiceId: string): Observable<InvoiceResponse> {
     const token = localStorage.getItem('khair_token');
-  
+
 
     const formData = new FormData();
     formData.append('invoice_id', invoiceId);
@@ -84,8 +89,8 @@ export class InvoiceService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<InvoiceResponse>(this.apiUrl+'?invoice_id='+invoiceId);
+    return this.http.get<InvoiceResponse>(this.apiUrl + '?invoice_id=' + invoiceId);
 
- 
+
   }
 }

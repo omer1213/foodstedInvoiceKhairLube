@@ -25,9 +25,9 @@ export class SuccessModalComponent {
     }
 
     // Auto close after 3 seconds
-    this.timeoutId = setTimeout(() => {
-      this.close();
-    }, 3000);
+    // this.timeoutId = setTimeout(() => {
+    //   this.close();
+    // }, 3000);
   }
 
   close() {

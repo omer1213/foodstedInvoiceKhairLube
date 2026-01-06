@@ -67,7 +67,8 @@
       alt="Print Image" class="print-image">
     <!-- <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div> -->
     <div class="overlay-text">
-      <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1" src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
+      <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1"
+        src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
 
       Tax Invoice
       <span class="arabic-title">فاتورة ضريبية</span>
@@ -343,7 +344,10 @@
       <table class="invoice-footer-table">
         <tr>
           <td class="footer-qr" rowspan="4">
-            <div class="qr-code">[QR CODE]</div>
+            <!-- <div class="qr-code">[QR CODE]{{ invoiceData?.qrcode_data }}</div> -->
+            <div class="qr-code">
+              <canvas #qrCanvas width="150" height="150"></canvas>
+            </div>
           </td>
           <td class="footer-stamp" rowspan="4">
             <div class="remarks-label">Remarks / ملاحظات :</div>
