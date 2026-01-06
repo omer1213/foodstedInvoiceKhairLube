@@ -759,14 +759,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     try {
       console.log('Triggering window.print() via autoPrintFallback');
       window.print();
-      // Close window if it was opened from print URL
-      if (this.isPrintMode) {
-        console.log('Print mode detected, will close window in 2 seconds');
-        setTimeout(() => {
-          console.log('Closing window...');
-          window.close();
-        }, 2000);
-      }
     } catch (e) {
       console.error('Auto print failed:', e);
     }
