@@ -18,6 +18,7 @@ export interface InvoiceItem {
 }
 
 export interface Invoice {
+  invoice_submittedzatca:number;
   invoice_no: string;
   invoice_date: string;
   invoice_duedate: string;
@@ -46,6 +47,20 @@ export interface InvoiceResponse {
   invoice_id: number;
   invoice: Invoice;
   invoiced: InvoiceItem[];
+ branch_result: BranchResult;
+}
+export interface BranchResult {
+  branch_id: number;
+  branch_zstreetname: string;
+  branch_zbuildingnum: string;
+  branch_zcity: string;
+  branch_zdistrict: string;
+  branch_zpostalcode: string;
+  branch_zvatnum: string;
+  branch_zcrno: string;
+  branch_zname: string;
+  branch_zaddno: string;
+  branch_zvatno:string;
 }
 
 @Injectable({
@@ -55,18 +70,11 @@ export class InvoiceService {
   // production
   private apiUrl = 'https://www.foodsted.com/khairlubricants/get_invoice';
 
-  // following is for the local
-    // private apiUrl = 'https://www.foodsted.com/khairlubricants/api/get_invoice';
-
   constructor(private http: HttpClient) {}
 
   getInvoiceDetails(invoiceId: string): Observable<InvoiceResponse> {
     const token = localStorage.getItem('khair_token');
-    // const userId = localStorage.getItem('khair_user_id');
-
-    // if (!token || !userId) {
-    //   throw new Error('Authentication required');
-    // }
+  
 
     const formData = new FormData();
     formData.append('invoice_id', invoiceId);
@@ -78,9 +86,6 @@ export class InvoiceService {
 
     return this.http.get<InvoiceResponse>(this.apiUrl+'?invoice_id='+invoiceId);
 
-    // followng will be sued in the lcoal systemr and the above will be sued in the producttion environment
-
-      // return this.http.get<InvoiceResponse>(this.apiUrl+'?invoice_id='+invoiceId, { headers });
-
+ 
   }
 }

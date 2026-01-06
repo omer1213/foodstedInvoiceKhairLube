@@ -25,7 +25,7 @@
         </button>
       </div>
       } -->
-      
+
     </div>
   </div>
 </header>
@@ -63,9 +63,15 @@
 <!-- Print Content (Hidden on screen, visible when printing) -->
 <div class="print-only">
   <div class="print-container">
-    <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png" alt="Print Image" class="print-image">
-    <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div>
+    <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png"
+      alt="Print Image" class="print-image">
+    <!-- <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div> -->
+    <div class="overlay-text">
+      <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca === 1" src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
 
+      Tax Invoice
+      <span class="arabic-title">فاتورة ضريبية</span>
+    </div>
     <!-- Invoice Details Section -->
     <div class="invoice-details">
       <table class="details-table">
@@ -96,12 +102,12 @@
         </tr>
         <tr>
           <td class="label">P.O No</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_po || 'Verbal' }}</td>
+          <td class="value">{{ invoiceData?.invoice?.invoice_po }}</td>
           <td class="arabic-label">ص.ب رﻗم</td>
         </tr>
         <tr>
           <td class="label">Payment Mode</td>
-          <td class="value">{{ invoiceData?.invoice?.zpaymentmeanscode_name || 'Credit' }}</td>
+          <td class="value">{{ invoiceData?.invoice?.zpaymentmeanscode_name }}</td>
           <td class="arabic-label">طريقة الدفع</td>
         </tr>
       </table>
@@ -146,7 +152,7 @@
                   التجاري</span></div>
             </div>
           </td>
-          <td class="seller-content">
+          <!-- <td class="seller-content">
             <div class="contact-info">
               <div class="info-row"><span class="field-label">Name</span><span class="field-value">Khair Lubricants
                   Company / شركة خير للزيوت</span><span class="field-arabic">ألاسم</span></div>
@@ -168,6 +174,36 @@
                   class="field-value">311480066300003</span><span class="field-arabic">الرقم الضريبي</span></div>
               <div class="info-row"><span class="field-label">C.R No</span><span
                   class="field-value">2050164240</span><span class="field-arabic">السجل التجاري</span></div>
+            </div>
+          </td> -->
+          <td class="seller-content">
+            <div class="contact-info">
+              <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zname }}</span><span class="field-arabic">ألاسم</span></div>
+              <div class="info-row"><span class="field-label">Building No</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zbuildingnum }}</span><span class="field-arabic">المبنى</span>
+              </div>
+              <div class="info-row"><span class="field-label">Street</span><span class="field-value"> عمر بن عبد العزيز
+                </span><span class="field-arabic">الشارع</span></div>
+              <div class="info-row"><span class="field-label">District</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zdistrict }}
+                </span><span class="field-arabic">الحي</span></div>
+              <div class="info-row"><span class="field-label">City</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zcity }}</span><span class="field-arabic">المدينة</span></div>
+              <div class="info-row"><span class="field-label">Country</span><span class="field-value">المملكة العربية
+                  السعودية</span><span class="field-arabic">الدولة</span></div>
+              <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zpostalcode }}</span><span class="field-arabic">الرمز البريدي
+                </span></div>
+              <div class="info-row"><span class="field-label">Add No</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zaddno }}</span><span class="field-arabic">الرمز الاضافي </span>
+              </div>
+              <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zvatnum }}</span><span class="field-arabic">الرقم الضريبي</span>
+              </div>
+              <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">{{
+                  invoiceData?.branch_result?.branch_zcrno }}</span><span class="field-arabic">السجل التجاري</span>
+              </div>
             </div>
           </td>
         </tr>
@@ -303,7 +339,7 @@
         <div class="footer-total-label-abs">Total Qty / إجمالي الكمية</div>
         <div class="footer-total-value-abs">{{ getTotalQty() }}</div>
       </div>
-      
+
       <table class="invoice-footer-table">
         <tr>
           <td class="footer-qr" rowspan="4">
