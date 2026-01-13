@@ -707,7 +707,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.qrCanvas.nativeElement,
         this.invoiceData!.qrcode_data,
         {
-          width: 90,
+          width: 60,
           margin: 1,
           color: {
             dark: '#000000',

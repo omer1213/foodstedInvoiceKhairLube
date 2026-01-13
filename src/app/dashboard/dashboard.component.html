@@ -343,12 +343,17 @@
 
       <table class="invoice-footer-table">
         <tr>
-          <td class="footer-qr" rowspan="4">
-            <!-- <div class="qr-code">[QR CODE]{{ invoiceData?.qrcode_data }}</div> -->
+          <!-- <td class="footer-qr" rowspan="4">
             <div class="qr-code">
               <canvas #qrCanvas width="150" height="150"></canvas>
             </div>
+          </td> -->
+           <td class="footer-qr" rowspan="4" *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1">
+            <div class="qr-code">
+              <canvas #qrCanvas width="60" height="60"></canvas>
+            </div>
           </td>
+        
           <td class="footer-stamp" rowspan="4">
             <div class="remarks-label">Remarks / ملاحظات :</div>
             <div class="stamp-label">Stamp / ختم :</div>
