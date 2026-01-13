@@ -667,6 +667,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // printUserId: string = '';
   printInvoiceId: string = '';
 
+  // Pagination properties for multi-page print
+  itemsPerPage: number = 10;
+  invoicePages: any[][] = [];
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -737,6 +741,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       next: (response) => {
         console.log('Invoice data received:', response);
         this.invoiceData = response;
+        
+        // Chunk items into pages for pagination
+        this.chunkItemsIntoPages();
+        
         // Generate QR code after data is loaded
         setTimeout(() => {
           if (this.invoiceData?.qrcode_data) {
@@ -995,4 +1003,63 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
     return words[digit] || 'Zero';
   }
+
+  // ============================================================
+  // MULTI-PAGE PRINT LOGIC - START
+  // ============================================================
+
+  /**
+   * Chunks invoice items into pages of itemsPerPage size
+   * Called when invoice data is loaded
+   */
+  private chunkItemsIntoPages(): void {
+    const items = this.invoiceData?.invoiced || [];
+    this.invoicePages = [];
+    
+    console.log('chunkItemsIntoPages - Total items:', items.length);
+    console.log('chunkItemsIntoPages - Items per page:', this.itemsPerPage);
+    
+    for (let i = 0; i < items.length; i += this.itemsPerPage) {
+      const pageItems = items.slice(i, i + this.itemsPerPage);
+      this.invoicePages.push(pageItems);
+      console.log(`chunkItemsIntoPages - Page ${this.invoicePages.length}: ${pageItems.length} items`);
+    }
+    
+    // Ensure at least one page exists (even if empty)
+    if (this.invoicePages.length === 0) {
+      this.invoicePages = [[]];
+    }
+    
+    console.log('chunkItemsIntoPages - Total pages created:', this.invoicePages.length);
+  }
+
+  /**
+   * Get all invoice pages for template iteration
+   */
+  getInvoicePages(): any[][] {
+    return this.invoicePages;
+  }
+
+  /**
+   * Check if this is the last page (for showing totals)
+   */
+  isLastPage(pageIndex: number): boolean {
+    return pageIndex === this.invoicePages.length - 1;
+  }
+
+  /**
+   * Get items for a specific page with proper POS numbering
+   */
+  getPageItems(pageIndex: number): any[] {
+    const pageItems = this.invoicePages[pageIndex] || [];
+    console.log(`getPageItems(${pageIndex}): returning ${pageItems.length} items from total pages: ${this.invoicePages.length}`);
+    return pageItems.map((item, index) => ({
+      ...item,
+      posNumber: (pageIndex * this.itemsPerPage) + index + 1
+    }));
+  }
+
+  // ============================================================
+  // MULTI-PAGE PRINT LOGIC - END
+  // ============================================================
 }

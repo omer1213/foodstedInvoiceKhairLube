@@ -211,11 +211,25 @@
     display: block;
     position: relative;
     width: 210mm !important;
-    height: 297mm !important;
     margin: 0 auto;
     background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    overflow: hidden;
+    overflow: visible;
+}
+
+/* Individual Invoice Page Wrapper */
+.invoice-page {
+    display: block;
+    width: 210mm;
+    margin: 0 auto 20px auto;
+    page-break-after: always;
+    break-after: page;
+    position: relative;
+}
+
+/* Last page should not have page break */
+.invoice-page:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
 }
 
 .print-container {
@@ -225,6 +239,8 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background-color: white;
+    display: block;
 }
 
 .print-image {
@@ -237,7 +253,8 @@
     margin: 0;
     padding: 0;
     display: block;
-    z-index: 0;
+    z-index: 1;
+    pointer-events: none;
 }
 
 /* ========================================
@@ -265,6 +282,7 @@
     font-weight: bold;
     color: black;
     text-align: center;
+    z-index: 20;
     z-index: 10;
 }
 
@@ -284,7 +302,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    z-index: 10;
+    z-index: 20;
     margin:0;
 }
 .details-table {
@@ -345,7 +363,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 635px;
-    z-index: 10;
+    z-index: 20;
     margin: 0px; /* YOUR ORIGINAL VALUE */
 }
 
@@ -476,7 +494,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    z-index: 10;
+    z-index: 20;
     margin: 0; /* YOUR ORIGINAL VALUE */
 }
 
@@ -595,7 +613,7 @@
 .total-qty-container {
     position: absolute;
     z-index: 20;
-    margin-top: -4px;
+     margin-top: -4px; 
 }
 
 .footer-total-label-abs {
@@ -625,6 +643,8 @@
     border-collapse: collapse;
     font-size: 11px;
     margin-top: 0;
+    z-index: 20;
+    position: relative;
 }
 
 .invoice-footer-table td {
@@ -640,8 +660,8 @@
 }
 
 .qr-code {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -680,6 +700,8 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+    z-index: 20;
+    position: relative;
 }
 
 .amount-words-left,
@@ -717,6 +739,8 @@
     align-items: center;
     margin-top: 4px;
     padding: 4px 0 !important;
+    z-index: 20;
+    position: relative;
 }
 
 .bank-left {
@@ -813,12 +837,11 @@
     }
 
     .print-only {
-        position: absolute;
-        left: 0;
-        top: 0;
+        position: static;
         width: 100%;
         margin: 0;
         box-shadow: none;
+        display: block;
     }
 
     *:not(.header-row):not(.header-row *) {
@@ -830,19 +853,44 @@
     html, body {
         margin: 0 !important;
         padding: 0 !important;
-        height: 100%;
-        overflow: hidden;
     }
 
     .print-container {
-        position: fixed;
-        top: 0;
-        left: 0;
+        position: static;
         width: 100%;
-        height: 100%;
+        height: auto;
         margin: 0;
         padding: 0;
-        overflow: hidden;
+        overflow: visible;
+        display: block;
+    }
+
+    /* Invoice page wrapper handles page breaks */
+    .invoice-page {
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .invoice-page:last-child {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Remove page-break class styling as it's now handled by print-container */
+    .page-break {
+        page-break-after: always;
+        break-after: page;
+    }
+
+    /* Ensure items don't break across pages */
+    .items-data-row {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Table header repeats on each page */
+    .items-table thead {
+        display: table-header-group;
     }
 
     .print-image {
@@ -878,6 +926,7 @@
     .company-title {
         font-size: 20px;
     }
+    
 
     .welcome-heading {
         font-size: 28px;
