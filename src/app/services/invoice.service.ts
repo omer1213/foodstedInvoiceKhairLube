@@ -68,29 +68,41 @@ export interface QRCode {
 }
 
 
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class InvoiceService {
+//   // production
+//   private apiUrl = 'https://www.foodsted.com/khairlubricants/get_invoice';
+
+//   constructor(private http: HttpClient) { }
+
+//   getInvoiceDetails(invoiceId: string): Observable<InvoiceResponse> {
+//     const token = localStorage.getItem('khair_token');
+
+
+//     const formData = new FormData();
+//     formData.append('invoice_id', invoiceId);
+//     // formData.append('user_id', userId);
+
+//     const headers = new HttpHeaders({
+//       'Authorization': `Bearer ${token}`
+//     });
+
+//     return this.http.get<InvoiceResponse>(this.apiUrl + '?invoice_id=' + invoiceId);
+
+
+//   }
+// }
 @Injectable({
   providedIn: 'root'
 })
 export class InvoiceService {
-  // production
   private apiUrl = 'https://www.foodsted.com/khairlubricants/get_invoice';
 
   constructor(private http: HttpClient) { }
 
   getInvoiceDetails(invoiceId: string): Observable<InvoiceResponse> {
-    const token = localStorage.getItem('khair_token');
-
-
-    const formData = new FormData();
-    formData.append('invoice_id', invoiceId);
-    // formData.append('user_id', userId);
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<InvoiceResponse>(this.apiUrl + '?invoice_id=' + invoiceId);
-
-
+    return this.http.get<InvoiceResponse>(`${this.apiUrl}?invoice_id=${invoiceId}`, { withCredentials: true });
   }
 }
