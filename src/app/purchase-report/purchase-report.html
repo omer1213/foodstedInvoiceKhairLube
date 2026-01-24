@@ -2,7 +2,7 @@
   <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="loading-container">
     <div class="spinner"></div>
-    <p>Loading sales report data...</p>
+    <p>Loading purchase report data...</p>
   </div>
 
   <!-- Report Content -->
@@ -15,7 +15,7 @@
 
     <!-- Report Title -->
     <div class="report-title">
-      <h3>Sales Report</h3>
+      <h3>Purchase Report</h3>
       <h4 *ngIf="fromDate && toDate">{{ fromDate }} to {{ toDate }}</h4>
     </div>
 
@@ -37,45 +37,43 @@
         <thead>
           <tr>
             <th (click)="sortData('index')" style="cursor: pointer;">Sr <span>{{ sortColumn === 'index' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('invoice_date')" style="cursor: pointer;">Date <span>{{ sortColumn === 'invoice_date' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('invoice_no')" style="cursor: pointer;">Invoice No <span>{{ sortColumn === 'invoice_no' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('item_code')" style="cursor: pointer;">Item Code <span>{{ sortColumn === 'item_code' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('item_name')" style="cursor: pointer;">Item Name <span>{{ sortColumn === 'item_name' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('invoiced_qty')" style="cursor: pointer;">Quantity <span>{{ sortColumn === 'invoiced_qty' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('invoiced_rate')" style="cursor: pointer;">Rate <span>{{ sortColumn === 'invoiced_rate' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('item_unit')" style="cursor: pointer;">Unit <span>{{ sortColumn === 'item_unit' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('amount')" style="cursor: pointer;">Amount <span>{{ sortColumn === 'amount' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('Type')" style="cursor: pointer;">Type <span>{{ sortColumn === 'Type' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('No')" style="cursor: pointer;">No <span>{{ sortColumn === 'No' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('Date')" style="cursor: pointer;">Date <span>{{ sortColumn === 'Date' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('SupplierInvoiceNo')" style="cursor: pointer;">Supplier Invoice No <span>{{ sortColumn === 'SupplierInvoiceNo' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('SupplierID')" style="cursor: pointer;">Supplier ID <span>{{ sortColumn === 'SupplierID' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('SupplierName')" style="cursor: pointer;">Supplier Name <span>{{ sortColumn === 'SupplierName' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('Total')" style="cursor: pointer;">Total <span>{{ sortColumn === 'Total' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('Discount')" style="cursor: pointer;">Discount <span>{{ sortColumn === 'Discount' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('VAT')" style="cursor: pointer;">VAT <span>{{ sortColumn === 'VAT' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('Payable')" style="cursor: pointer;">Payable <span>{{ sortColumn === 'Payable' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of displayedData; let i = index">
             <td>{{ ((currentPage - 1) * itemsPerPage) + i + 1 }}</td>
-            <td>{{ item.invoice_date | date:'dd-MM-yyyy' }}</td>
-            <td>{{ item.invoice_no }}</td>
-            <td>{{ item.item_code }}</td>
-            <td>{{ item.item_name }}</td>
-            <td class="text-right">{{ item.invoiced_qty }}</td>
-            <td class="text-right">{{ item.invoiced_rate | number:'1.2-2' }}</td>
-            <td>{{ item.item_unit }}</td>
-            <td class="text-right">{{ (item.invoiced_qty * item.invoiced_rate) | number:'1.2-2' }}</td>
+            <td>{{ item.Type }}</td>
+            <td>{{ item.No }}</td>
+            <td>{{ item.Date | date:'dd-MM-yyyy' }}</td>
+            <td>{{ item.SupplierInvoiceNo }}</td>
+            <td>{{ item.SupplierID }}</td>
+            <td>{{ item.SupplierName }}</td>
+            <td class="text-right">{{ item.Total | number:'1.2-2' }}</td>
+            <td class="text-right">{{ item.Discount | number:'1.2-2' }}</td>
+            <td class="text-right">{{ item.VAT | number:'1.2-2' }}</td>
+            <td class="text-right">{{ item.Payable | number:'1.2-2' }}</td>
           </tr>
         </tbody>
         <tfoot>
           <!-- Page Total (shown on every page) -->
           <tr class="page-total-row">
-            <th colspan="5">Page Total:</th>
-            <th class="text-right">{{ getPageTotalQuantity() }}</th>
-            <th></th>
-            <th></th>
+            <th colspan="10">Page Total:</th>
             <th class="text-right">{{ getPageTotalAmount() | number:'1.2-2' }}</th>
           </tr>
           <!-- Grand Total (shown only on last page) -->
           <tr *ngIf="isLastPage()" class="grand-total-row">
-            <th colspan="5">Grand Total:</th>
-            <th class="text-right">{{ getTotalQuantity() }}</th>
-            <th></th>
-            <th></th>
-            <th class="text-right">{{ getTotalAmount() | number:'1.2-2' }}</th>
+            <th colspan="10">Grand Total:</th>
+            <th class="text-right">{{ getTotalPayableAmount() | number:'1.2-2' }}</th>
           </tr>
         </tfoot>
       </table>

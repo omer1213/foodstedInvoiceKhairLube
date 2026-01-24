@@ -56,7 +56,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       info: false,
       responsive: false,
       columnDefs: [
-        { targets: [5, 6, 8], className: 'text-right' },
+        { targets: [7, 8, 9, 10], className: 'text-right' }, // Total, Discount, VAT, Payable
         { targets: [0], className: 'text-center' },
         { targets: '_all', className: 'text-center' }
       ]
@@ -93,11 +93,8 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         next: (response) => {
           console.log('Sales Report Response:', response);
           this.isLoading = false;
-          if (response && response.invoice_list) {
-            this.invoiceData = response.invoice_list.map((item: any) => ({
-              ...item,
-              amount: (parseFloat(item.invoiced_qty) || 0) * (parseFloat(item.invoiced_rate) || 0)
-            }));
+          if (response && response.purchase_list) {
+            this.invoiceData = response.purchase_list;
             this.filteredData = [...this.invoiceData];
             this.totalItems = this.filteredData.length;
             this.updatePagination();
@@ -135,11 +132,11 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       let valueA = a[column];
       let valueB = b[column];
 
-      // Handle numeric columns (e.g., invoiced_qty, invoiced_rate, amount)
-      if (column === 'invoiced_qty' || column === 'invoiced_rate' || column === 'amount') {
+      // Handle numeric columns
+      if (['Total', 'Discount', 'VAT', 'Payable'].includes(column)) {
         valueA = parseFloat(valueA) || 0;
         valueB = parseFloat(valueB) || 0;
-      } else if (column === 'invoice_date') {
+      } else if (column === 'Date') {
         // For dates, convert to Date objects
         valueA = new Date(valueA);
         valueB = new Date(valueB);
@@ -205,28 +202,48 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
 
   // Page totals (only for currently displayed items)
   getPageTotalQuantity(): number {
-    return this.displayedData.reduce((total, item) => total + (parseFloat(item.invoiced_qty) || 0), 0);
+    return this.displayedData.length;  // Number of invoices
   }
 
   getPageTotalAmount(): number {
-    return this.displayedData.reduce((total, item) => {
-      const qty = parseFloat(item.invoiced_qty) || 0;
-      const rate = parseFloat(item.invoiced_rate) || 0;
-      return total + (qty * rate);
-    }, 0);
+    let purchaseTotal = 0;
+    let purchaseReturnTotal = 0;
+
+    this.displayedData.forEach(item => {
+      const totalAmount = parseFloat(item.Total) || 0;
+      if (item.Type === 'purchase') {
+        purchaseTotal += totalAmount;
+      } else if (item.Type === 'purchaseReturn') {
+        purchaseReturnTotal += totalAmount;
+      }
+    });
+
+    return purchaseTotal - purchaseReturnTotal;
   }
 
   // Grand totals (for all items)
   getTotalQuantity(): number {
-    return this.invoiceData.reduce((total, item) => total + (parseFloat(item.invoiced_qty) || 0), 0);
+    return this.invoiceData.length;  // Total invoices
   }
 
   getTotalAmount(): number {
-    return this.invoiceData.reduce((total, item) => {
-      const qty = parseFloat(item.invoiced_qty) || 0;
-      const rate = parseFloat(item.invoiced_rate) || 0;
-      return total + (qty * rate);
-    }, 0);
+    return this.invoiceData.reduce((total, item) => total + (parseFloat(item.Total) || 0), 0);
+  }
+
+  getTotalPayableAmount(): number {
+    let purchaseTotal = 0;
+    let purchaseReturnTotal = 0;
+
+    this.invoiceData.forEach(item => {
+      const payableAmount = parseFloat(item.Payable) || 0;
+      if (item.Type === 'purchase') {
+        purchaseTotal += payableAmount;
+      } else if (item.Type === 'purchaseReturn') {
+        purchaseReturnTotal += payableAmount;
+      }
+    });
+
+    return purchaseTotal - purchaseReturnTotal;
   }
 
   // Check if current page is the last page
@@ -249,31 +266,39 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       return;
     }
 
-    const headers = ['Sr', 'Date', 'Invoice No', 'Item Code', 'Item Name', 'Quantity', 'Rate', 'Unit', 'Amount'];
+    const headers = ['Sr', 'Type', 'No', 'Date', 'SupplierInvoiceNo', 'SupplierID', 'SupplierName', 'Total', 'Discount', 'VAT', 'Payable'];
     const csvContent = [headers.join(',')];
 
     this.invoiceData.forEach((item, index) => {
-      const amount = (parseFloat(item.invoiced_qty) || 0) * (parseFloat(item.invoiced_rate) || 0);
       const row = [
         index + 1,
-        item.invoice_date,
-        item.invoice_no,
-        item.item_code,
-        `"${item.item_name}"`,
-        item.invoiced_qty,
-        item.invoiced_rate,
-        item.item_unit,
-        amount.toFixed(2)
+        item.Type,
+        item.No,
+        item.Date,
+        item.SupplierInvoiceNo,
+        item.SupplierID,
+        `"${item.SupplierName}"`,
+        item.Total,
+        item.Discount,
+        item.VAT,
+        item.Payable
       ];
       csvContent.push(row.join(','));
     });
+
+    // Add totals to CSV
+    csvContent.push(''); // Empty line
+    const pageTotalRow = ['', '', '', '', '', '', '', '', '', '', 'Page Total:', this.getPageTotalAmount().toFixed(2)];
+    csvContent.push(pageTotalRow.join(','));
+    const grandTotalRow = ['', '', '', '', '', '', '', '', '', '', 'Grand Total:', this.getTotalPayableAmount().toFixed(2)];
+    csvContent.push(grandTotalRow.join(','));
 
     const csvData = csvContent.join('\n');
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    const filename = `sales_report_${new Date().toISOString().slice(0, 10)}.csv`;
+    const filename = `purchase_report_${new Date().toISOString().slice(0, 10)}.csv`;
     link.setAttribute('download', filename);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
@@ -292,40 +317,44 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       <table border="1">
         <tr>
           <th>Sr</th>
+          <th>Type</th>
+          <th>No</th>
           <th>Date</th>
-          <th>Invoice No</th>
-          <th>Item Code</th>
-          <th>Item Name</th>
-          <th>Quantity</th>
-          <th>Rate</th>
-          <th>Unit</th>
-          <th>Amount</th>
+          <th>SupplierInvoiceNo</th>
+          <th>SupplierID</th>
+          <th>SupplierName</th>
+          <th>Total</th>
+          <th>Discount</th>
+          <th>VAT</th>
+          <th>Payable</th>
         </tr>`;
 
     this.invoiceData.forEach((item, index) => {
-      const amount = (parseFloat(item.invoiced_qty) || 0) * (parseFloat(item.invoiced_rate) || 0);
       excelContent += `
         <tr>
           <td>${index + 1}</td>
-          <td>${item.invoice_date}</td>
-          <td>${item.invoice_no}</td>
-          <td>${item.item_code}</td>
-          <td>${item.item_name}</td>
-          <td>${item.invoiced_qty}</td>
-          <td>${item.invoiced_rate}</td>
-          <td>${item.item_unit}</td>
-          <td>${amount.toFixed(2)}</td>
+          <td>${item.Type}</td>
+          <td>${item.No}</td>
+          <td>${item.Date}</td>
+          <td>${item.SupplierInvoiceNo}</td>
+          <td>${item.SupplierID}</td>
+          <td>${item.SupplierName}</td>
+          <td>${item.Total}</td>
+          <td>${item.Discount}</td>
+          <td>${item.VAT}</td>
+          <td>${item.Payable}</td>
         </tr>`;
     });
 
     // Add total row
     excelContent += `
         <tr style="font-weight: bold; background-color: #e9ecef;">
-          <td colspan="5">Total:</td>
-          <td>${this.getTotalQuantity()}</td>
-          <td></td>
-          <td></td>
-          <td>${this.getTotalAmount().toFixed(2)}</td>
+          <td colspan="10">Page Total:</td>
+          <td>${this.getPageTotalAmount().toFixed(2)}</td>
+        </tr>
+        <tr style="font-weight: bold; background-color: #d1ecf1;">
+          <td colspan="10">Grand Total:</td>
+          <td>${this.getTotalPayableAmount().toFixed(2)}</td>
         </tr>
       </table>`;
 
@@ -333,7 +362,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    const filename = `sales_report_${new Date().toISOString().slice(0, 10)}.xls`;
+    const filename = `purchase_report_${new Date().toISOString().slice(0, 10)}.xls`;
     link.setAttribute('download', filename);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
@@ -365,7 +394,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text('Sales Report', doc.internal.pageSize.getWidth() / 2, 45, { align: 'center' });
+    doc.text('Purchase Report', doc.internal.pageSize.getWidth() / 2, 45, { align: 'center' });
     
     if (this.fromDate && this.toDate) {
       doc.setFontSize(12);
@@ -375,24 +404,25 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
 
     // Prepare table data WITHOUT total row
     const tableData = this.invoiceData.map((item, index) => {
-      const amount = (parseFloat(item.invoiced_qty) || 0) * (parseFloat(item.invoiced_rate) || 0);
       return [
         index + 1,
-        item.invoice_date,
-        item.invoice_no,
-        item.item_code,
-        item.item_name,
-        item.invoiced_qty,
-        parseFloat(item.invoiced_rate).toFixed(2),
-        item.item_unit,
-        amount.toFixed(2)
+        item.Type,
+        item.No,
+        item.Date,
+        item.SupplierInvoiceNo,
+        item.SupplierID,
+        item.SupplierName,
+        item.Total,
+        item.Discount,
+        item.VAT,
+        item.Payable
       ];
     });
 
     // Generate table without total row first
     autoTable(doc, {
       startY: 65,
-      head: [['Sr', 'Date', 'Invoice No', 'Item Code', 'Item Name', 'Qty', 'Rate', 'Unit', 'Amount']],
+      head: [['Sr', 'Type', 'No', 'Date', 'Supplier Invoice No', 'Supplier ID', 'Supplier Name', 'Total', 'Discount', 'VAT', 'Payable']],
       body: tableData,
       theme: 'striped',
       headStyles: {
@@ -403,18 +433,20 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       },
       bodyStyles: {
         halign: 'center',
-        fontSize: 9
+        fontSize: 7  // Smaller font for more columns
       },
       columnStyles: {
         0: { halign: 'center' }, // Sr
-        1: { halign: 'center' }, // Date
-        2: { halign: 'center' }, // Invoice No
-        3: { halign: 'center' }, // Item Code
-        4: { halign: 'left' },   // Item Name
-        5: { halign: 'right' },  // Qty
-        6: { halign: 'right' },  // Rate
-        7: { halign: 'center' }, // Unit
-        8: { halign: 'right' }   // Amount
+        1: { halign: 'center' }, // Type
+        2: { halign: 'center' }, // No
+        3: { halign: 'center' }, // Date
+        4: { halign: 'center' }, // SupplierInvoiceNo
+        5: { halign: 'center' }, // SupplierID
+        6: { halign: 'left' },   // SupplierName
+        7: { halign: 'right' },  // Total
+        8: { halign: 'right' },  // Discount
+        9: { halign: 'right' },  // VAT
+        10: { halign: 'right' }  // Payable
       },
       alternateRowStyles: {
         fillColor: [248, 249, 250]
@@ -430,11 +462,8 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       startY: finalY,
       head: [],
       body: [[
-        '', '', '', '', 'Total:',
-        this.getTotalQuantity().toString(),
-        '',
-        '',
-        this.getTotalAmount().toFixed(2)
+        '', '', '', '', '', '', '', '', '', '', 'Page Total:',
+        this.getPageTotalAmount().toFixed(2)
       ]],
       theme: 'plain',
       bodyStyles: {
@@ -444,18 +473,39 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         fillColor: [233, 236, 239]
       },
       columnStyles: {
-        4: { halign: 'left', fontStyle: 'bold' },   // "Total:" label
-        5: { halign: 'right', fontStyle: 'bold' },  // Total Qty
-        8: { halign: 'right', fontStyle: 'bold' }   // Total Amount
+        10: { halign: 'left', fontStyle: 'bold' },   // "Page Total:" label
+        11: { halign: 'right', fontStyle: 'bold' }   // Total Amount
+      },
+      margin: { top: 0, right: 10, bottom: 10, left: 10 }
+    });
+
+    // Add Grand Total row
+    const grandTotalY = (doc as any).lastAutoTable.finalY + 3;
+    autoTable(doc, {
+      startY: grandTotalY,
+      head: [],
+      body: [[
+        '', '', '', '', '', '', '', '', '', '', 'Grand Total:',
+        this.getTotalPayableAmount().toFixed(2)
+      ]],
+      theme: 'plain',
+      bodyStyles: {
+        halign: 'center',
+        fontSize: 9,
+        fontStyle: 'bold',
+        fillColor: [209, 236, 241]
+      },
+      columnStyles: {
+        10: { halign: 'left', fontStyle: 'bold' },   // "Grand Total:" label
+        11: { halign: 'right', fontStyle: 'bold' }   // Grand Total Amount
       },
       margin: { top: 0, right: 10, bottom: 10, left: 10 }
     });
 
     // Save the PDF
-    const filename = `sales_report_${landscape ? 'landscape_' : ''}${new Date().toISOString().slice(0, 10)}.pdf`;
+    const filename = `purchase_report_${landscape ? 'landscape_' : ''}${new Date().toISOString().slice(0, 10)}.pdf`;
     doc.save(filename);
   }
-//data for the print file changing
   printReport(): void {
     if (this.invoiceData.length === 0) {
       alert('No data available to print.');
@@ -466,7 +516,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Sales Report - Print</title>
+        <title>Purchase Report - Print</title>
         <style>
           @media print { 
             @page { size: A4; margin: 1cm; }
@@ -489,7 +539,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         <div class="header">
           <h1>Khair Lubricant</h1>
           <h2>Dammam Saudi Arabia</h2>
-          <h3>Sales Report</h3>
+          <h3>Purchase Report</h3>
           ${this.fromDate && this.toDate ? `<p>${this.fromDate} to ${this.toDate}</p>` : ''}
         </div>
         
@@ -497,32 +547,35 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
           <thead>
             <tr>
               <th>Sr</th>
+              <th>Type</th>
+              <th>No</th>
               <th>Date</th>
-              <th>Invoice No</th>
-              <th>Item Code</th>
-              <th>Item Name</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>Unit</th>
-              <th>Amount</th>
+              <th>Supplier Invoice No</th>
+              <th>Supplier ID</th>
+              <th>Supplier Name</th>
+              <th>Total</th>
+              <th>Discount</th>
+              <th>VAT</th>
+              <th>Payable</th>
             </tr>
           </thead>
           <tbody>`;
 
     // Add all data rows
     this.invoiceData.forEach((item, index) => {
-      const amount = (parseFloat(item.invoiced_qty) || 0) * (parseFloat(item.invoiced_rate) || 0);
       printContent += `
             <tr>
               <td>${index + 1}</td>
-              <td>${item.invoice_date}</td>
-              <td>${item.invoice_no}</td>
-              <td>${item.item_code}</td>
-              <td class="text-left">${item.item_name}</td>
-              <td class="text-right">${item.invoiced_qty}</td>
-              <td class="text-right">${parseFloat(item.invoiced_rate).toFixed(2)}</td>
-              <td>${item.item_unit}</td>
-              <td class="text-right">${amount.toFixed(2)}</td>
+              <td>${item.Type}</td>
+              <td>${item.No}</td>
+              <td>${item.Date}</td>
+              <td>${item.SupplierInvoiceNo}</td>
+              <td>${item.SupplierID}</td>
+              <td class="text-left">${item.SupplierName}</td>
+              <td class="text-right">${item.Total}</td>
+              <td class="text-right">${item.Discount}</td>
+              <td class="text-right">${item.VAT}</td>
+              <td class="text-right">${item.Payable}</td>
             </tr>`;
     });
 
@@ -534,11 +587,12 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         <table class="total-table">
           <tbody>
             <tr class="total-row">
-              <td colspan="5" style="text-align: right; font-weight: bold; font-size: 12px;">TOTAL:</td>
-              <td style="text-align: right; font-weight: bold; font-size: 12px;">${this.getTotalQuantity()}</td>
-              <td style="font-size: 12px;"></td>
-              <td style="font-size: 12px;"></td>
-              <td style="text-align: right; font-weight: bold; font-size: 12px;">${this.getTotalAmount().toFixed(2)}</td>
+              <td colspan="10" style="text-align: right; font-weight: bold; font-size: 12px;">Page Total:</td>
+              <td style="text-align: right; font-weight: bold; font-size: 12px;">${this.getPageTotalAmount().toFixed(2)}</td>
+            </tr>
+            <tr class="grand-total-row">
+              <td colspan="10" style="text-align: right; font-weight: bold; font-size: 12px;">Grand Total:</td>
+              <td style="text-align: right; font-weight: bold; font-size: 12px; background-color: #d1ecf1;">${this.getTotalPayableAmount().toFixed(2)}</td>
             </tr>
           </tbody>
         </table>
