@@ -175,7 +175,7 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
     // Clean up DataTable
     this.dtTrigger.unsubscribe();
   }
-
+//data for the csv file changing
   exportToCSV(): void {
     if (this.invoiceData.length === 0) {
       alert('No data available to export.');
@@ -219,7 +219,7 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
       alert('No data available to export.');
       return;
     }
-
+//data for the excelContent file changing
     // Create Excel content (using HTML table format for Excel)
     let excelContent = `
       <table border="1">
@@ -273,7 +273,7 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
     link.click();
     document.body.removeChild(link);
   }
-
+//data for the pdf file changing
   exportToPDF(landscape: boolean = false): void {
     if (this.invoiceData.length === 0) {
       alert('No data available to export.');
@@ -388,7 +388,7 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
     const filename = `sales_report_${landscape ? 'landscape_' : ''}${new Date().toISOString().slice(0, 10)}.pdf`;
     doc.save(filename);
   }
-
+//data for the print file changing
   printReport(): void {
     if (this.invoiceData.length === 0) {
       alert('No data available to print.');
