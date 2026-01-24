@@ -22,26 +22,29 @@
     <!-- Data Table Container -->
     <div *ngIf="invoiceData.length > 0" class="table-container">
       <!-- Export Buttons -->
-      <div class="export-buttons">
-        <button (click)="exportToCSV()" class="btn-export">CSV</button>
-        <button (click)="exportToExcel()" class="btn-export">Excel</button>
-        <button (click)="exportToPDF()" class="btn-export">PDF</button>
-        <button (click)="exportToPDF(true)" class="btn-export">Landscape PDF</button>
-        <button (click)="printReport()" class="btn-export">Print</button>
+      <div class="export-buttons" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <button (click)="exportToCSV()" class="btn-export">CSV</button>
+          <button (click)="exportToExcel()" class="btn-export">Excel</button>
+          <button (click)="exportToPDF()" class="btn-export">PDF</button>
+          <button (click)="exportToPDF(true)" class="btn-export">Landscape PDF</button>
+          <button (click)="printReport()" class="btn-export">Print</button>
+        </div>
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search..." style="padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
       </div>
       
       <table #dataTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table table-striped table-bordered">
         <thead>
           <tr>
-            <th>Sr</th>
-            <th>Date</th>
-            <th>Invoice No</th>
-            <th>Item Code</th>
-            <th>Item Name</th>
-            <th>Quantity</th>
-            <th>Rate</th>
-            <th>Unit</th>
-            <th>Amount</th>
+            <th (click)="sortData('index')" style="cursor: pointer;">Sr <span>{{ sortColumn === 'index' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('invoice_date')" style="cursor: pointer;">Date <span>{{ sortColumn === 'invoice_date' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('invoice_no')" style="cursor: pointer;">Invoice No <span>{{ sortColumn === 'invoice_no' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('item_code')" style="cursor: pointer;">Item Code <span>{{ sortColumn === 'item_code' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('item_name')" style="cursor: pointer;">Item Name <span>{{ sortColumn === 'item_name' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('invoiced_qty')" style="cursor: pointer;">Quantity <span>{{ sortColumn === 'invoiced_qty' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('invoiced_rate')" style="cursor: pointer;">Rate <span>{{ sortColumn === 'invoiced_rate' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('item_unit')" style="cursor: pointer;">Unit <span>{{ sortColumn === 'item_unit' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
+            <th (click)="sortData('amount')" style="cursor: pointer;">Amount <span>{{ sortColumn === 'amount' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
           </tr>
         </thead>
         <tbody>

@@ -6,13 +6,14 @@ import { DataTablesModule } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { FormsModule } from '@angular/forms';
 
 declare var $: any;
 
 @Component({
   selector: 'app-sale-report',
   standalone: true,
-  imports: [CommonModule, DataTablesModule],
+  imports: [CommonModule, DataTablesModule, FormsModule],
   templateUrl: './sale-report.html',
   styleUrls: ['./sale-report.css'],
 })
@@ -21,6 +22,7 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
   
   invoiceData: any[] = [];
   displayedData: any[] = [];
+  filteredData: any[] = [];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   isLoading: boolean = false;
@@ -33,6 +35,13 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPages: number = 1;
   totalItems: number = 0;
 
+  // Search property
+  searchTerm: string = '';
+
+  // Sorting properties
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   constructor(
     private route: ActivatedRoute,
     private salesReportService: SalesReportService
@@ -43,7 +52,7 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtOptions = {
       paging: false,
       searching: false,
-      ordering: true,
+      ordering: false,
       info: false,
       responsive: false,
       columnDefs: [
@@ -85,8 +94,12 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('Sales Report Response:', response);
           this.isLoading = false;
           if (response && response.invoice_list) {
-            this.invoiceData = response.invoice_list;
-            this.totalItems = this.invoiceData.length;
+            this.invoiceData = response.invoice_list.map((item: any) => ({
+              ...item,
+              amount: (parseFloat(item.invoiced_qty) || 0) * (parseFloat(item.invoiced_rate) || 0)
+            }));
+            this.filteredData = [...this.invoiceData];
+            this.totalItems = this.filteredData.length;
             this.updatePagination();
             setTimeout(() => {
               this.dtTrigger.next(null);
@@ -104,7 +117,61 @@ export class SaleReportComponent implements OnInit, AfterViewInit, OnDestroy {
     this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.displayedData = this.invoiceData.slice(startIndex, endIndex);
+    this.displayedData = this.filteredData.slice(startIndex, endIndex);
+  }
+
+  sortData(column: string): void {
+    if (this.sortColumn === column) {
+      // Toggle direction if same column
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // New column, start with ascending
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    // Sort the full filteredData array
+    this.filteredData.sort((a, b) => {
+      let valueA = a[column];
+      let valueB = b[column];
+
+      // Handle numeric columns (e.g., invoiced_qty, invoiced_rate, amount)
+      if (column === 'invoiced_qty' || column === 'invoiced_rate' || column === 'amount') {
+        valueA = parseFloat(valueA) || 0;
+        valueB = parseFloat(valueB) || 0;
+      } else if (column === 'invoice_date') {
+        // For dates, convert to Date objects
+        valueA = new Date(valueA);
+        valueB = new Date(valueB);
+      } else {
+        // For strings, use lowercase for case-insensitive sort
+        valueA = (valueA || '').toString().toLowerCase();
+        valueB = (valueB || '').toString().toLowerCase();
+      }
+
+      if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+      if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    // Reset to first page and update pagination after sorting
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  onSearch(): void {
+    if (this.searchTerm.trim() === '') {
+      this.filteredData = [...this.invoiceData];
+    } else {
+      this.filteredData = this.invoiceData.filter(item =>
+        Object.values(item).some(value =>
+          String(value).toLowerCase().includes(this.searchTerm.toLowerCase())
+        )
+      );
+    }
+    this.totalItems = this.filteredData.length;
+    this.currentPage = 1;
+    this.updatePagination();
   }
 
   goToPage(page: number): void {
