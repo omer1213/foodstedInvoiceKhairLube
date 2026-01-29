@@ -476,20 +476,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    const canvas = this.qrCanvas.nativeElement;
+    
+    // Set canvas size to match QR code dimensions to prevent clipping
+    canvas.width = 90;
+    canvas.height = 90;
+
     try {
       await QRCodeLib.toCanvas(
-        this.qrCanvas.nativeElement,
+        canvas,
         this.invoiceData!.qrcode_data,
         {
-          width: 60,
-          margin: 1,
+          width: 90,  // Match the canvas size
+          margin: 2,
           color: {
             dark: '#000000',
             light: '#ffffff'
           }
         }
       );
-      console.log('QR Code generated successfully!');
+      console.log('QR Code generated successfully on canvas 120x120!');
     } catch (error) {
       console.error('Error generating QR code:', error);
     }
