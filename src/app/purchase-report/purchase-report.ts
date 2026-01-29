@@ -56,7 +56,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       info: false,
       responsive: false,
       columnDefs: [
-        { targets: [7, 8, 9, 10], className: 'text-right' }, // Total, Discount, VAT, Payable
+        { targets: [6, 7, 8, 9], className: 'text-right' }, // Total, Discount, VAT, Payable (updated indices after removing SupplierID)
         { targets: [0], className: 'text-center' },
         { targets: '_all', className: 'text-center' }
       ]
@@ -221,6 +221,40 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     return purchaseTotal - purchaseReturnTotal;
   }
 
+  // Page total discount (for currently displayed items)
+  getPageTotalDiscount(): number {
+    let purchaseDiscount = 0;
+    let purchaseReturnDiscount = 0;
+
+    this.displayedData.forEach(item => {
+      const discount = parseFloat(item.Discount) || 0;
+      if (item.Type === 'purchase') {
+        purchaseDiscount += discount;
+      } else if (item.Type === 'purchaseReturn') {
+        purchaseReturnDiscount += discount;
+      }
+    });
+
+    return purchaseDiscount - purchaseReturnDiscount;
+  }
+
+  // Page total VAT (for currently displayed items)
+  getPageTotalVAT(): number {
+    let purchaseVAT = 0;
+    let purchaseReturnVAT = 0;
+
+    this.displayedData.forEach(item => {
+      const vat = parseFloat(item.VAT) || 0;
+      if (item.Type === 'purchase') {
+        purchaseVAT += vat;
+      } else if (item.Type === 'purchaseReturn') {
+        purchaseReturnVAT += vat;
+      }
+    });
+
+    return purchaseVAT - purchaseReturnVAT;
+  }
+
   // Grand totals (for all items)
   getTotalQuantity(): number {
     return this.invoiceData.length;  // Total invoices
@@ -246,6 +280,40 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     return purchaseTotal - purchaseReturnTotal;
   }
 
+  // Grand total discount (for all items)
+  getTotalDiscountAmount(): number {
+    let purchaseDiscount = 0;
+    let purchaseReturnDiscount = 0;
+
+    this.invoiceData.forEach(item => {
+      const discount = parseFloat(item.Discount) || 0;
+      if (item.Type === 'purchase') {
+        purchaseDiscount += discount;
+      } else if (item.Type === 'purchaseReturn') {
+        purchaseReturnDiscount += discount;
+      }
+    });
+
+    return purchaseDiscount - purchaseReturnDiscount;
+  }
+
+  // Grand total VAT (for all items)
+  getTotalVATAmount(): number {
+    let purchaseVAT = 0;
+    let purchaseReturnVAT = 0;
+
+    this.invoiceData.forEach(item => {
+      const vat = parseFloat(item.VAT) || 0;
+      if (item.Type === 'purchase') {
+        purchaseVAT += vat;
+      } else if (item.Type === 'purchaseReturn') {
+        purchaseReturnVAT += vat;
+      }
+    });
+
+    return purchaseVAT - purchaseReturnVAT;
+  }
+
   // Check if current page is the last page
   isLastPage(): boolean {
     return this.currentPage === this.totalPages;
@@ -266,7 +334,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       return;
     }
 
-    const headers = ['Sr', 'Type', 'No', 'Date', 'SupplierInvoiceNo', 'SupplierID', 'SupplierName', 'Total', 'Discount', 'VAT', 'Payable'];
+    const headers = ['Sr', 'Type', 'No', 'Date', 'SupplierInvoiceNo', 'SupplierName', 'Total', 'Discount', 'VAT', 'Payable'];
     const csvContent = [headers.join(',')];
 
     this.invoiceData.forEach((item, index) => {
@@ -276,7 +344,6 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         item.No,
         item.Date,
         item.SupplierInvoiceNo,
-        item.SupplierID,
         `"${item.SupplierName}"`,
         item.Total,
         item.Discount,
@@ -290,6 +357,10 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     csvContent.push(''); // Empty line
     const pageTotalRow = ['', '', '', '', '', '', '', '', '', '', 'Page Total:', this.getPageTotalAmount().toFixed(2)];
     csvContent.push(pageTotalRow.join(','));
+    const grandDiscountRow = ['', '', '', '', '', '', '', '', '', '', 'Grand Discount:', this.getTotalDiscountAmount().toFixed(2)];
+    csvContent.push(grandDiscountRow.join(','));
+    const grandVATRow = ['', '', '', '', '', '', '', '', '', '', 'Grand VAT:', this.getTotalVATAmount().toFixed(2)];
+    csvContent.push(grandVATRow.join(','));
     const grandTotalRow = ['', '', '', '', '', '', '', '', '', '', 'Grand Total:', this.getTotalPayableAmount().toFixed(2)];
     csvContent.push(grandTotalRow.join(','));
 
@@ -321,7 +392,6 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
           <th>No</th>
           <th>Date</th>
           <th>SupplierInvoiceNo</th>
-          <th>SupplierID</th>
           <th>SupplierName</th>
           <th>Total</th>
           <th>Discount</th>
@@ -337,7 +407,6 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
           <td>${item.No}</td>
           <td>${item.Date}</td>
           <td>${item.SupplierInvoiceNo}</td>
-          <td>${item.SupplierID}</td>
           <td>${item.SupplierName}</td>
           <td>${item.Total}</td>
           <td>${item.Discount}</td>
@@ -349,11 +418,19 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     // Add total row
     excelContent += `
         <tr style="font-weight: bold; background-color: #e9ecef;">
-          <td colspan="10">Page Total:</td>
+          <td colspan="9">Page Total:</td>
           <td>${this.getPageTotalAmount().toFixed(2)}</td>
         </tr>
+        <tr style="font-weight: bold; background-color: #e9ecef;">
+          <td colspan="9">Grand Discount:</td>
+          <td>${this.getTotalDiscountAmount().toFixed(2)}</td>
+        </tr>
+        <tr style="font-weight: bold; background-color: #e9ecef;">
+          <td colspan="9">Grand VAT:</td>
+          <td>${this.getTotalVATAmount().toFixed(2)}</td>
+        </tr>
         <tr style="font-weight: bold; background-color: #d1ecf1;">
-          <td colspan="10">Grand Total:</td>
+          <td colspan="9">Grand Total:</td>
           <td>${this.getTotalPayableAmount().toFixed(2)}</td>
         </tr>
       </table>`;
@@ -402,7 +479,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       doc.text(`${this.fromDate} to ${this.toDate}`, doc.internal.pageSize.getWidth() / 2, 55, { align: 'center' });
     }
 
-    // Prepare table data WITHOUT total row
+    // Prepare table data WITHOUT total row (SupplierID removed)
     const tableData = this.invoiceData.map((item, index) => {
       return [
         index + 1,
@@ -410,7 +487,6 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         item.No,
         item.Date,
         item.SupplierInvoiceNo,
-        item.SupplierID,
         item.SupplierName,
         item.Total,
         item.Discount,
@@ -422,7 +498,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
     // Generate table without total row first
     autoTable(doc, {
       startY: 65,
-      head: [['Sr', 'Type', 'No', 'Date', 'Supplier Invoice No', 'Supplier ID', 'Supplier Name', 'Total', 'Discount', 'VAT', 'Payable']],
+      head: [['Sr', 'Type', 'No', 'Date', 'Supplier Invoice No', 'Supplier Name', 'Total', 'Discount', 'VAT', 'Payable']],
       body: tableData,
       theme: 'striped',
       headStyles: {
@@ -441,12 +517,11 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         2: { halign: 'center' }, // No
         3: { halign: 'center' }, // Date
         4: { halign: 'center' }, // SupplierInvoiceNo
-        5: { halign: 'center' }, // SupplierID
-        6: { halign: 'left' },   // SupplierName
-        7: { halign: 'right' },  // Total
-        8: { halign: 'right' },  // Discount
-        9: { halign: 'right' },  // VAT
-        10: { halign: 'right' }  // Payable
+        5: { halign: 'left' },   // SupplierName
+        6: { halign: 'right' },  // Total
+        7: { halign: 'right' },  // Discount
+        8: { halign: 'right' },  // VAT
+        9: { halign: 'right' }   // Payable
       },
       alternateRowStyles: {
         fillColor: [248, 249, 250]
@@ -462,7 +537,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       startY: finalY,
       head: [],
       body: [[
-        '', '', '', '', '', '', '', '', '', '', 'Page Total:',
+        '', '', '', '', '', '', '', '', 'Page Total:',
         this.getPageTotalAmount().toFixed(2)
       ]],
       theme: 'plain',
@@ -473,8 +548,56 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         fillColor: [233, 236, 239]
       },
       columnStyles: {
-        10: { halign: 'left', fontStyle: 'bold' },   // "Page Total:" label
-        11: { halign: 'right', fontStyle: 'bold' }   // Total Amount
+        8: { halign: 'left', fontStyle: 'bold' },   // "Page Total:" label
+        9: { halign: 'right', fontStyle: 'bold' }   // Total Amount
+      },
+      margin: { top: 0, right: 10, bottom: 10, left: 10 }
+    });
+
+    // (Removed page-level Discount/VAT rows — only grand totals printed below)
+
+    // Add Grand Discount row
+    const grandDiscY = (doc as any).lastAutoTable.finalY + 3;
+    autoTable(doc, {
+      startY: grandDiscY,
+      head: [],
+      body: [[
+        '', '', '', '', '', '', '', '', 'Grand Discount:',
+        this.getTotalDiscountAmount().toFixed(2)
+      ]],
+      theme: 'plain',
+      bodyStyles: {
+        halign: 'center',
+        fontSize: 9,
+        fontStyle: 'bold',
+        fillColor: [209, 236, 241]
+      },
+      columnStyles: {
+        8: { halign: 'left', fontStyle: 'bold' },
+        9: { halign: 'right', fontStyle: 'bold' }
+      },
+      margin: { top: 0, right: 10, bottom: 10, left: 10 }
+    });
+
+    // Add Grand VAT row
+    const grandVatY = (doc as any).lastAutoTable.finalY + 3;
+    autoTable(doc, {
+      startY: grandVatY,
+      head: [],
+      body: [[
+        '', '', '', '', '', '', '', '', 'Grand VAT:',
+        this.getTotalVATAmount().toFixed(2)
+      ]],
+      theme: 'plain',
+      bodyStyles: {
+        halign: 'center',
+        fontSize: 9,
+        fontStyle: 'bold',
+        fillColor: [209, 236, 241]
+      },
+      columnStyles: {
+        8: { halign: 'left', fontStyle: 'bold' },
+        9: { halign: 'right', fontStyle: 'bold' }
       },
       margin: { top: 0, right: 10, bottom: 10, left: 10 }
     });
@@ -485,7 +608,7 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
       startY: grandTotalY,
       head: [],
       body: [[
-        '', '', '', '', '', '', '', '', '', '', 'Grand Total:',
+        '', '', '', '', '', '', '', '', 'Grand Total:',
         this.getTotalPayableAmount().toFixed(2)
       ]],
       theme: 'plain',
@@ -496,8 +619,8 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         fillColor: [209, 236, 241]
       },
       columnStyles: {
-        10: { halign: 'left', fontStyle: 'bold' },   // "Grand Total:" label
-        11: { halign: 'right', fontStyle: 'bold' }   // Grand Total Amount
+        8: { halign: 'left', fontStyle: 'bold' },   // "Grand Total:" label
+        9: { halign: 'right', fontStyle: 'bold' }   // Grand Total Amount
       },
       margin: { top: 0, right: 10, bottom: 10, left: 10 }
     });
@@ -551,7 +674,6 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
               <th>No</th>
               <th>Date</th>
               <th>Supplier Invoice No</th>
-              <th>Supplier ID</th>
               <th>Supplier Name</th>
               <th>Total</th>
               <th>Discount</th>
@@ -570,7 +692,6 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
               <td>${item.No}</td>
               <td>${item.Date}</td>
               <td>${item.SupplierInvoiceNo}</td>
-              <td>${item.SupplierID}</td>
               <td class="text-left">${item.SupplierName}</td>
               <td class="text-right">${item.Total}</td>
               <td class="text-right">${item.Discount}</td>
@@ -587,11 +708,19 @@ export class PurchaseReportComponent implements OnInit, AfterViewInit, OnDestroy
         <table class="total-table">
           <tbody>
             <tr class="total-row">
-              <td colspan="10" style="text-align: right; font-weight: bold; font-size: 12px;">Page Total:</td>
+              <td colspan="9" style="text-align: right; font-weight: bold; font-size: 12px;">Page Total:</td>
               <td style="text-align: right; font-weight: bold; font-size: 12px;">${this.getPageTotalAmount().toFixed(2)}</td>
             </tr>
+            <tr class="total-row">
+              <td colspan="9" style="text-align: right; font-weight: bold; font-size: 12px;">Grand Discount:</td>
+              <td style="text-align: right; font-weight: bold; font-size: 12px;">${this.getTotalDiscountAmount().toFixed(2)}</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="9" style="text-align: right; font-weight: bold; font-size: 12px;">Grand VAT:</td>
+              <td style="text-align: right; font-weight: bold; font-size: 12px;">${this.getTotalVATAmount().toFixed(2)}</td>
+            </tr>
             <tr class="grand-total-row">
-              <td colspan="10" style="text-align: right; font-weight: bold; font-size: 12px;">Grand Total:</td>
+              <td colspan="9" style="text-align: right; font-weight: bold; font-size: 12px;">Grand Total:</td>
               <td style="text-align: right; font-weight: bold; font-size: 12px; background-color: #d1ecf1;">${this.getTotalPayableAmount().toFixed(2)}</td>
             </tr>
           </tbody>

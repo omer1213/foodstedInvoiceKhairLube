@@ -41,7 +41,6 @@
             <th (click)="sortData('No')" style="cursor: pointer;">No <span>{{ sortColumn === 'No' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
             <th (click)="sortData('Date')" style="cursor: pointer;">Date <span>{{ sortColumn === 'Date' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
             <th (click)="sortData('SupplierInvoiceNo')" style="cursor: pointer;">Supplier Invoice No <span>{{ sortColumn === 'SupplierInvoiceNo' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
-            <th (click)="sortData('SupplierID')" style="cursor: pointer;">Supplier ID <span>{{ sortColumn === 'SupplierID' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
             <th (click)="sortData('SupplierName')" style="cursor: pointer;">Supplier Name <span>{{ sortColumn === 'SupplierName' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
             <th (click)="sortData('Total')" style="cursor: pointer;">Total <span>{{ sortColumn === 'Total' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
             <th (click)="sortData('Discount')" style="cursor: pointer;">Discount <span>{{ sortColumn === 'Discount' ? (sortDirection === 'asc' ? '↑' : '↓') : '⇅' }}</span></th>
@@ -56,7 +55,6 @@
             <td>{{ item.No }}</td>
             <td>{{ item.Date | date:'dd-MM-yyyy' }}</td>
             <td>{{ item.SupplierInvoiceNo }}</td>
-            <td>{{ item.SupplierID }}</td>
             <td>{{ item.SupplierName }}</td>
             <td class="text-right">{{ item.Total | number:'1.2-2' }}</td>
             <td class="text-right">{{ item.Discount | number:'1.2-2' }}</td>
@@ -67,14 +65,25 @@
         <tfoot>
           <!-- Page Total (shown on every page) -->
           <tr class="page-total-row">
-            <th colspan="10">Page Total:</th>
+            <th colspan="9">Page Total:</th>
             <th class="text-right">{{ getPageTotalAmount() | number:'1.2-2' }}</th>
           </tr>
-          <!-- Grand Total (shown only on last page) -->
-          <tr *ngIf="isLastPage()" class="grand-total-row">
-            <th colspan="10">Grand Total:</th>
-            <th class="text-right">{{ getTotalPayableAmount() | number:'1.2-2' }}</th>
-          </tr>
+          <!-- (Page-level Discount/VAT removed; only Grand totals shown on last page) -->
+          <!-- Grand totals (shown only on last page) -->
+          <ng-container *ngIf="isLastPage()">
+            <tr class="grand-discount-row">
+              <th colspan="9">Grand Discount:</th>
+              <th class="text-right">{{ getTotalDiscountAmount() | number:'1.2-2' }}</th>
+            </tr>
+            <tr class="grand-vat-row">
+              <th colspan="9">Grand VAT:</th>
+              <th class="text-right">{{ getTotalVATAmount() | number:'1.2-2' }}</th>
+            </tr>
+            <tr class="grand-total-row">
+              <th colspan="9">Grand Total:</th>
+              <th class="text-right">{{ getTotalPayableAmount() | number:'1.2-2' }}</th>
+            </tr>
+          </ng-container>
         </tfoot>
       </table>
 
