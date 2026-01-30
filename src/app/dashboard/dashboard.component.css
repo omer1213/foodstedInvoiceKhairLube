@@ -275,7 +275,22 @@
 
 .overlay-text {
     position: absolute;
-    top: 13%; /* YOUR ORIGINAL VALUE */
+    top: 13%;
+    /* YOUR ORIGINAL VALUE */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    z-index: 20;
+    z-index: 10;
+}
+
+.overlay-text_hund {
+    position: absolute;
+    top: 16%;
+    /* YOUR ORIGINAL VALUE */
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 22px;
@@ -298,20 +313,33 @@
 
 .invoice-details {
     position: absolute;
-    top: 15%; /* YOUR ORIGINAL VALUE */
+    top: 15%;
+    /* YOUR ORIGINAL VALUE */
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
     z-index: 20;
-    margin:0;
+    margin: 0;
 }
+
+.invoice-details_hund {
+    position: absolute;
+    top: 18%;
+    /* YOUR ORIGINAL VALUE */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    z-index: 20;
+    margin: 0;
+}
+
 .details-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
     background: transparent;
     border: 2px solid #333;
-    margin:0;
+    margin: 0;
 }
 
 .details-table tr:first-child td {
@@ -341,7 +369,7 @@
 
 .arabic-label {
     font-weight: bold;
-    width: 25%;
+    width: 40%;
     text-align: right;
     direction: rtl;
 }
@@ -359,12 +387,26 @@
 
 .buyer-seller-section {
     position: absolute;
-    top: 26%; /* YOUR ORIGINAL VALUE */
+    top: 26%;
+    /* YOUR ORIGINAL VALUE */
     left: 50%;
     transform: translateX(-50%);
     width: 635px;
     z-index: 20;
-    margin: 0px; /* YOUR ORIGINAL VALUE */
+    margin: 0px;
+    /* YOUR ORIGINAL VALUE */
+}
+
+.buyer-seller-section_hund {
+    position: absolute;
+    top: 32%;
+    /* YOUR ORIGINAL VALUE */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 635px;
+    z-index: 20;
+    margin: 0px;
+    /* YOUR ORIGINAL VALUE */
 }
 
 .buyer-seller-table {
@@ -376,6 +418,7 @@
 }
 
 .buyer-seller-table .header-row td {
+
     background-color: #2299b3 !important;
     background: #2299b3 !important;
     color: white !important;
@@ -400,9 +443,26 @@
     direction: rtl;
     font-weight: bold;
 }
+.arabic-text_hund {
+    float: right !important;
+    font-size: 25px;
+    direction: rtl;
+    font-weight: bold;
+    padding-left: 30px;
+}
 
 .buyer-seller-table .header-row .buyer-header {
     border-right: 2px solid #333 !important;
+    background-color: #2299b3 !important;
+    background: #2299b3 !important;
+}
+
+.buyer-seller-table .header-row .buyer-header_hund {
+    /* border-right: 2px solid #333 !important; */
+    width: 100%;
+    text-align: center;
+
+    
     background-color: #2299b3 !important;
     background: #2299b3 !important;
 }
@@ -418,9 +478,11 @@
     font-size: 16px;
 }
 
+
 /* FIX: Remove extra padding from buyer/seller content rows */
 .buyer-seller-table tr:not(.header-row) td {
-    padding: 5px 12px !important; /* Fixed padding */
+    padding: 5px 12px !important;
+    /* Fixed padding */
 }
 
 .buyer-seller-table .buyer-content,
@@ -442,7 +504,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px !important; /* Reduced from 8px */
+    margin-bottom: 4px !important;
+    /* Reduced from 8px */
     line-height: 1.2;
 }
 
@@ -490,12 +553,14 @@
 } */
 .invoice-items-section {
     position: absolute;
-    top: 42.6%; /* YOUR ORIGINAL VALUE */
+    top: 42.6%;
+    /* YOUR ORIGINAL VALUE */
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
     z-index: 20;
-    margin: 0; /* YOUR ORIGINAL VALUE */
+    margin: 0;
+    /* YOUR ORIGINAL VALUE */
 }
 
 .items-table-wrapper {
@@ -565,16 +630,51 @@
     color-adjust: exact !important;
 }
 
-.items-table .items-header-row td:nth-child(1) { width: 5%; }
-.items-table .items-header-row td:nth-child(2) { padding: 2px 1px !important; line-height: 1.05; width: 15%; text-align: left !important; padding-left: 8px !important; }
-.items-table .items-header-row td:nth-child(3) { text-align: left !important; padding-left: 8px !important; width: 25%; }
-.items-table .items-header-row td:nth-child(4) { width: 8%; }
-.items-table .items-header-row td:nth-child(5) { width: 8%; }
-.items-table .items-header-row td:nth-child(6) { width: 8%; }
-.items-table .items-header-row td:nth-child(7) { width: 10%; }
-.items-table .items-header-row td:nth-child(8) { width: 8%; }
-.items-table .items-header-row td:nth-child(9) { width: 8%; }
-.items-table .items-header-row td:nth-child(10) { width: 10%; }
+.items-table .items-header-row td:nth-child(1) {
+    width: 5%;
+}
+
+.items-table .items-header-row td:nth-child(2) {
+    padding: 2px 1px !important;
+    line-height: 1.05;
+    width: 15%;
+    text-align: left !important;
+    padding-left: 8px !important;
+}
+
+.items-table .items-header-row td:nth-child(3) {
+    text-align: left !important;
+    padding-left: 8px !important;
+    width: 25%;
+}
+
+.items-table .items-header-row td:nth-child(4) {
+    width: 8%;
+}
+
+.items-table .items-header-row td:nth-child(5) {
+    width: 8%;
+}
+
+.items-table .items-header-row td:nth-child(6) {
+    width: 8%;
+}
+
+.items-table .items-header-row td:nth-child(7) {
+    width: 10%;
+}
+
+.items-table .items-header-row td:nth-child(8) {
+    width: 8%;
+}
+
+.items-table .items-header-row td:nth-child(9) {
+    width: 8%;
+}
+
+.items-table .items-header-row td:nth-child(10) {
+    width: 10%;
+}
 
 .items-table .items-header-row td .arabic-text {
     font-size: 7px;
@@ -582,6 +682,7 @@
     line-height: 1;
     margin-top: 1px;
 }
+
 
 .items-table .items-header-row td:last-child {
     border-right: none !important;
@@ -613,7 +714,7 @@
 .total-qty-container {
     position: absolute;
     z-index: 20;
-     margin-top: -4px; 
+    margin-top: -4px;
 }
 
 .footer-total-label-abs {
@@ -745,7 +846,8 @@
     flex: 1 1 55%;
     display: flex;
     flex-direction: column;
-    gap: 2px; /* Reduced from 4px */
+    gap: 2px;
+    /* Reduced from 4px */
     font-size: 11px;
     line-height: 1.1;
 }
@@ -786,7 +888,8 @@
     flex: 1 1 35%;
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Reduced from 10px */
+    gap: 8px;
+    /* Reduced from 10px */
     align-items: flex-end;
     font-size: 11px;
 }
@@ -820,6 +923,10 @@
     border: none !important;
 }
 
+.rowHund {
+    padding-bottom: 70px;
+}
+
 /* ========================================
    PRINT MEDIA QUERY - Only visibility logic
    ======================================== */
@@ -848,7 +955,8 @@
         box-sizing: border-box !important;
     }
 
-    html, body {
+    html,
+    body {
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -924,7 +1032,7 @@
     .company-title {
         font-size: 20px;
     }
-    
+
 
     .welcome-heading {
         font-size: 28px;

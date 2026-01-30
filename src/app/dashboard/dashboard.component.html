@@ -1,64 +1,30 @@
-<!-- Dashboard Header -->
-
-<!-- Main Dashboard Content -->
-<!-- <div class="main-content">
-  <div class="dashboard-welcome">
-    <h2 class="welcome-heading">Invoice Printing System</h2>
-    <p class="welcome-description">Generate and print professional invoices for Khair Lubricants Company</p>
-  </div>
-
-  <div class="action-section">
-    <div class="action-buttons">
-       <button (click)="printContent()" class="print-button">
-        <svg fill="currentColor" viewBox="0 0 20 20" class="print-icon">
-          <path fill-rule="evenodd"
-            d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM5 14H4v-2h1v2zm1 0v2h8v-2H6zm9 0h1v-2h-1v2z"
-            clip-rule="evenodd" />
-        </svg>
-        Print Invoice
-      </button> 
-
-      <button (click)="navigateToItems()" class="items-button">
-        <svg fill="currentColor" viewBox="0 0 20 20" class="items-icon">
-          <path fill-rule="evenodd"
-            d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clip-rule="evenodd" />
-        </svg>
-        Item List
-      </button>
-    </div>
-  </div>
-</div> -->
-
-
 <!-- Print Content (Hidden on screen, visible when printing) -->
-<div class="print-only">
+<div class="print-only" *ngIf="invoiceData?.invoice?.cmp_id === '1021'">
   <!-- Page Loop - Each page gets the complete invoice layout -->
-  <div *ngFor="let page of getInvoicePages(); let pageIndex = index" 
-       class="invoice-page" 
-       [attr.data-page]="pageIndex + 1">
-    
-     <div class="print-container">
-    <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png"
-      alt="Print Image" class="print-image">
-    <!-- <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div> -->
-    <div class="overlay-text">
-      <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1"
-        src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
+  <div *ngFor="let page of getInvoicePages(); let pageIndex = index" class="invoice-page"
+    [attr.data-page]="pageIndex + 1">
 
-      Tax Invoice
-      <span class="arabic-title">فاتورة ضريبية</span>
-    </div>
+    <div class="print-container">
+      <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png"
+        alt="Print Image" class="print-image">
+      <!-- <div class="overlay-text">Tax Invoice <span class="arabic-title">فاتورة ضريبية</span></div> -->
+      <div class="overlay-text">
+        <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1"
+          src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
 
-    <!-- Invoice Details Section -->
-    <div class="invoice-details">
-      <table class="details-table">
-        <tr>
-          <td class="label">Invoice No</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_no }}</td>
-          <td class="arabic-label">رقم الفاتورة</td>
-        </tr>
-        <!-- <tr>
+        Tax Invoice
+        <span class="arabic-title">فاتورة ضريبية</span>
+      </div>
+
+      <!-- Invoice Details Section -->
+      <div class="invoice-details">
+        <table class="details-table">
+          <tr>
+            <td class="label">Invoice No</td>
+            <td class="value">{{ invoiceData?.invoice?.invoice_no }}</td>
+            <td class="arabic-label">رقم الفاتورة</td>
+          </tr>
+          <!-- <tr>
           <td class="label">Invoice Date</td>
           <td class="value">{{ invoiceData?.invoice?.invoice_date || '30/11/2025' }}</td>
           <td class="arabic-label">تاريخ الفاتورة</td>
@@ -68,105 +34,106 @@
           <td class="value">{{ invoiceData?.invoice?.invoice_duedate || '30/11/2025' }}</td>
           <td class="arabic-label">تاريخ الاستحقاق</td>
         </tr> -->
-        <tr>
-          <td class="label">Invoice Date</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_date | date:'dd-MM-yyyy' }}</td>
-          <td class="arabic-label">تاريخ الفاتورة</td>
-        </tr>
-        <tr>
-          <td class="label">Due Date</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_duedate | date:'dd-MM-yyyy' }}</td>
-          <td class="arabic-label">تاريخ الاستحقاق</td>
-        </tr>
-        <tr>
-          <td class="label">P.O No</td>
-          <td class="value">{{ invoiceData?.invoice?.invoice_po  }}</td>
-          <td class="arabic-label">ص.ب رﻗم</td>
-        </tr>
-        <tr>
-          <td class="label">Payment Mode</td>
-          <td class="value">{{ invoiceData?.invoice?.zpaymentmeanscode_name  }}</td>
-          <td class="arabic-label">طريقة الدفع</td>
-        </tr>
-      </table>
-    </div>
+          <tr>
+            <td class="label">Invoice Date</td>
+            <td class="value">{{ invoiceData?.invoice?.invoice_date | date:'dd-MM-yyyy' }}</td>
+            <td class="arabic-label">تاريخ الفاتورة</td>
+          </tr>
+          <tr>
+            <td class="label">Due Date</td>
+            <td class="value">{{ invoiceData?.invoice?.invoice_duedate | date:'dd-MM-yyyy' }}</td>
+            <td class="arabic-label">تاريخ الاستحقاق</td>
+          </tr>
+          <tr>
+            <td class="label">P.O No</td>
+            <td class="value">{{ invoiceData?.invoice?.invoice_po }}</td>
+            <td class="arabic-label">ص.ب رﻗم</td>
+          </tr>
+          <tr>
+            <td class="label">Payment Mode</td>
+            <td class="value">{{ invoiceData?.invoice?.zpaymentmeanscode_name }}</td>
+            <td class="arabic-label">طريقة الدفع</td>
+          </tr>
+        </table>
+      </div>
 
-    <!-- Buyer/Seller Section -->
-    <div class="buyer-seller-section">
-      <table class="buyer-seller-table">
-        <tr class="header-row">
-          <td class="buyer-header"><span class="english-text">Buyer</span><span class="arabic-text">المشتري</span></td>
-          <td class="seller-header"><span class="english-text">Seller</span><span class="arabic-text">بائع</span></td>
-        </tr>
-        <tr>
-          <td class="buyer-content">
-            <div class="contact-info">
-              <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_displayname }} / {{
-                  invoiceData?.invoice?.party_displayname_ar }}</span><span class="field-arabic">ألاسم</span></div>
-              <div class="info-row"><span class="field-label">Building No</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_building }}</span><span class="field-arabic">المبنى</span>
+      <!-- Buyer/Seller Section -->
+      <div class="buyer-seller-section">
+        <table class="buyer-seller-table">
+          <tr class="header-row">
+            <td class="buyer-header"><span class="english-text">Buyer</span><span class="arabic-text">المشتري</span>
+            </td>
+            <td class="seller-header"><span class="english-text">Seller</span><span class="arabic-text">بائع</span></td>
+          </tr>
+          <tr>
+            <td class="buyer-content">
+              <div class="contact-info">
+                <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_displayname }} / {{
+                    invoiceData?.invoice?.party_displayname_ar }}</span><span class="field-arabic">ألاسم</span></div>
+                <div class="info-row"><span class="field-label">Building No</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_building }}</span><span class="field-arabic">المبنى</span>
+                </div>
+                <div class="info-row"><span class="field-label">Street</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_street }}</span><span class="field-arabic">الشارع</span></div>
+                <div class="info-row"><span class="field-label">District</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_district }}</span><span class="field-arabic">الحي</span></div>
+                <div class="info-row"><span class="field-label">City</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_city }}</span><span class="field-arabic">المدينة</span></div>
+                <div class="info-row"><span class="field-label">Country</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_country }}</span><span class="field-arabic">الدولة</span></div>
+                <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_postalcode }}</span><span class="field-arabic">الرمز
+                    البريدي</span></div>
+                <div class="info-row"><span class="field-label">Add No</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_addno }}</span><span class="field-arabic">الرمز الاضافي</span>
+                </div>
+                <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_ntn }}</span><span class="field-arabic">الرقم
+                    الضريبي</span></div>
+                <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">{{
+                    invoiceData?.invoice?.party_crnum }}</span><span class="field-arabic">السجل
+                    التجاري</span></div>
               </div>
-              <div class="info-row"><span class="field-label">Street</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_street }}</span><span class="field-arabic">الشارع</span></div>
-              <div class="info-row"><span class="field-label">District</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_district }}</span><span class="field-arabic">الحي</span></div>
-              <div class="info-row"><span class="field-label">City</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_city }}</span><span class="field-arabic">المدينة</span></div>
-              <div class="info-row"><span class="field-label">Country</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_country }}</span><span
-                  class="field-arabic">الدولة</span></div>
-              <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_postalcode }}</span><span class="field-arabic">الرمز
-                  البريدي</span></div>
-              <div class="info-row"><span class="field-label">Add No</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_addno }}</span><span class="field-arabic">الرمز الاضافي</span>
+            </td>
+            <td class="seller-content">
+              <div class="contact-info">
+                <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zname }}</span><span class="field-arabic">ألاسم</span></div>
+                <div class="info-row"><span class="field-label">Building No</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zbuildingnum }}</span><span class="field-arabic">المبنى</span>
+                </div>
+                <div class="info-row"><span class="field-label">Street</span><span class="field-value"> عمر بن عبد
+                    العزيز
+                  </span><span class="field-arabic">الشارع</span></div>
+                <div class="info-row"><span class="field-label">District</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zdistrict }}
+                  </span><span class="field-arabic">الحي</span></div>
+                <div class="info-row"><span class="field-label">City</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zcity }}</span><span class="field-arabic">المدينة</span></div>
+                <div class="info-row"><span class="field-label">Country</span><span class="field-value">المملكة العربية
+                    السعودية</span><span class="field-arabic">الدولة</span></div>
+                <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zpostalcode }}</span><span class="field-arabic">الرمز البريدي
+                  </span></div>
+                <div class="info-row"><span class="field-label">Add No</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zaddno }}</span><span class="field-arabic">الرمز الاضافي </span>
+                </div>
+                <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zvatnum }}</span><span class="field-arabic">الرقم الضريبي</span>
+                </div>
+                <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">{{
+                    invoiceData?.branch_result?.branch_zcrno }}</span><span class="field-arabic">السجل التجاري</span>
+                </div>
               </div>
-              <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_ntn }}</span><span class="field-arabic">الرقم
-                  الضريبي</span></div>
-              <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">{{
-                  invoiceData?.invoice?.party_crnum }}</span><span class="field-arabic">السجل
-                  التجاري</span></div>
-            </div>
-          </td>
-          <td class="seller-content">
-            <div class="contact-info">
-              <div class="info-row"><span class="field-label">Name</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zname }}</span><span class="field-arabic">ألاسم</span></div>
-              <div class="info-row"><span class="field-label">Building No</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zbuildingnum }}</span><span class="field-arabic">المبنى</span>
-              </div>
-              <div class="info-row"><span class="field-label">Street</span><span class="field-value"> عمر بن عبد العزيز
-                </span><span class="field-arabic">الشارع</span></div>
-              <div class="info-row"><span class="field-label">District</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zdistrict }}
-                </span><span class="field-arabic">الحي</span></div>
-              <div class="info-row"><span class="field-label">City</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zcity }}</span><span class="field-arabic">المدينة</span></div>
-              <div class="info-row"><span class="field-label">Country</span><span class="field-value">المملكة العربية
-                  السعودية</span><span class="field-arabic">الدولة</span></div>
-              <div class="info-row"><span class="field-label">Postal Code</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zpostalcode }}</span><span class="field-arabic">الرمز البريدي
-                </span></div>
-              <div class="info-row"><span class="field-label">Add No</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zaddno }}</span><span class="field-arabic">الرمز الاضافي </span>
-              </div>
-              <div class="info-row"><span class="field-label">VAT No.</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zvatnum }}</span><span class="field-arabic">الرقم الضريبي</span>
-              </div>
-              <div class="info-row"><span class="field-label">C.R No</span><span class="field-value">{{
-                  invoiceData?.branch_result?.branch_zcrno }}</span><span class="field-arabic">السجل التجاري</span>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-    <!-- Invoice Items Section -->
-    <div class="invoice-items-section">
-      <!-- <table class="items-table">
+      <!-- Invoice Items Section -->
+      <div class="invoice-items-section">
+        <!-- <table class="items-table">
         <tr class="items-header-row">
           <td class="items-header">POS<br><span >نقاط البيع</span></td>
           <td class="items-header">Code<br><span >كتيرة</span></td>
@@ -194,9 +161,9 @@
       </table>
        -->
 
-      <!-- second code from cluade -->
-      <!-- WRAP YOUR TABLE WITH THIS DIV -->
-      <!-- <div class="items-table-wrapper ">
+        <!-- second code from cluade -->
+        <!-- WRAP YOUR TABLE WITH THIS DIV -->
+        <!-- <div class="items-table-wrapper ">
         
         <table class="items-table ">
           <tr class="items-header-row">
@@ -226,141 +193,392 @@
         </table>
       </div> -->
 
-      <!-- third from claude -->
-      <div class="items-table-wrapper">
+        <!-- third from claude -->
+        <div class="items-table-wrapper">
 
-        <!-- BACKGROUND TABLE - SHOWS COLUMN LINES ALWAYS -->
-        <table class="background-grid-table">
-          <colgroup>
-            <col style="width: 5%;">
-            <col style="width: 15%;">
-            <col style="width: 25%;">
-            <col style="width: 8%;">
-            <col style="width: 8%;">
-            <col style="width: 8%;">
-            <col style="width: 10%;">
-            <col style="width: 8%;">
-            <col style="width: 8%;">
-            <col style="width: 10%;">
-          </colgroup>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </table>
+          <!-- BACKGROUND TABLE - SHOWS COLUMN LINES ALWAYS -->
+          <table class="background-grid-table">
+            <colgroup>
+              <col style="width: 5%;">
+              <col style="width: 15%;">
+              <col style="width: 25%;">
+              <col style="width: 8%;">
+              <col style="width: 8%;">
+              <col style="width: 8%;">
+              <col style="width: 10%;">
+              <col style="width: 8%;">
+              <col style="width: 8%;">
+              <col style="width: 10%;">
+            </colgroup>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
 
-        <!-- DATA TABLE - YOUR ACTUAL DATA -->
-        <table class="items-table">
-          <tr class="items-header-row">
-            <td class="items-header">POS Sr<br><span>POS اﻷب</span></td>
-            <td class="items-header">Code<br><span>ﺷﻔرة</span></td>
-            <td class="items-header">Item Description<br><span>وصف السلعة</span></td>
-            <td class="items-header">Unit<br><span>وحدة</span></td>
-            <td class="items-header">Invoiced<br>Qty<br><span>اﻟﻛﻣﯾﺔ اﻟﻣﻔوﺗرة</span></td>
-            <td class="items-header">Rate<br><span>سعر</span></td>
-            <td class="items-header">Amount<br><span>كمية</span></td>
-            <td class="items-header">Discount<br><span>تخفيض</span></td>
-            <td class="items-header">VAT<span>ضريبة القيمة المضافة</span></td>
-            <td class="items-header">Net Amt<br><span>صافي المبلغ</span></td>
-          </tr>
-          <tr class="items-data-row" *ngFor="let item of getPageItems(pageIndex)">
-            <td class="items-data">{{ item.posNumber }}.</td>
-            <td class="items-data">{{ item.item_code }}</td>
-            <td class="items-data">{{ item.item_name }}</td>
-            <td class="items-data">{{ item.item_unit }}</td>
-            <td class="items-data">{{ item.invoiced_qty }}</td>
-            <td class="items-data">{{ item.invoiced_rate }}</td>
-            <td class="items-data">{{ item.invoiced_pricewithoutdiscounttax }}</td>
-            <td class="items-data">{{ item.invoiced_totaldiscount }}</td>
-            <td class="items-data">{{ item.invoiced_totalvat }}</td>
-            <td class="items-data">{{ item.invoiced_netprice }}</td>
-          </tr>
-        </table>
+          <!-- DATA TABLE - YOUR ACTUAL DATA -->
+          <table class="items-table">
+            <tr class="items-header-row">
+              <td class="items-header">POS Sr<br><span>POS اﻷب</span></td>
+              <td class="items-header">Code<br><span>ﺷﻔرة</span></td>
+              <td class="items-header">Item Description<br><span>وصف السلعة</span></td>
+              <td class="items-header">Unit<br><span>وحدة</span></td>
+              <td class="items-header">Invoiced<br>Qty<br><span>اﻟﻛﻣﯾﺔ اﻟﻣﻔوﺗرة</span></td>
+              <td class="items-header">Rate<br><span>سعر</span></td>
+              <td class="items-header">Amount<br><span>كمية</span></td>
+              <td class="items-header">Discount<br><span>تخفيض</span></td>
+              <td class="items-header">VAT<span>ضريبة القيمة المضافة</span></td>
+              <td class="items-header">Net Amt<br><span>صافي المبلغ</span></td>
+            </tr>
+            <tr class="items-data-row" *ngFor="let item of getPageItems(pageIndex)">
+              <td class="items-data">{{ item.posNumber }}.</td>
+              <td class="items-data">{{ item.item_code }}</td>
+              <td class="items-data">{{ item.item_name }}</td>
+              <td class="items-data">{{ item.item_unit }}</td>
+              <td class="items-data">{{ item.invoiced_qty }}</td>
+              <td class="items-data">{{ item.invoiced_rate }}</td>
+              <td class="items-data">{{ item.invoiced_pricewithoutdiscounttax }}</td>
+              <td class="items-data">{{ item.invoiced_totaldiscount }}</td>
+              <td class="items-data">{{ item.invoiced_totalvat }}</td>
+              <td class="items-data">{{ item.invoiced_netprice }}</td>
+            </tr>
+          </table>
 
-      </div>
-
-      <!-- Footer Section - Only show on last page -->
-      <div *ngIf="isLastPage(pageIndex)">
-        <!-- Absolute positioned Total Qty elements -->
-        <div class="total-qty-container">
-          <div class="footer-total-label-abs">Total Qty / إجمالي الكمية</div>
-          <div class="footer-total-value-abs">{{ getTotalQty() }}</div>
         </div>
 
-        <table class="invoice-footer-table">
-          <tr>
-            <!-- <div class="qr-code">{{ invoiceData?.qrcode_data }}
+        <!-- Footer Section - Only show on last page -->
+        <div *ngIf="isLastPage(pageIndex)">
+          <!-- Absolute positioned Total Qty elements -->
+          <div class="total-qty-container">
+            <div class="footer-total-label-abs">Total Qty / إجمالي الكمية</div>
+            <div class="footer-total-value-abs">{{ getTotalQty() }}</div>
+          </div>
+
+          <table class="invoice-footer-table">
+            <tr>
+              <!-- <div class="qr-code">{{ invoiceData?.qrcode_data }}
   </div> -->
-            <!-- <td class="footer-qr" rowspan="4">
+              <!-- <td class="footer-qr" rowspan="4">
               <div class="qr-code">
                 <canvas #qrCanvas width="150" height="150"></canvas>
               </div>
             </td> -->
-                    <td class="footer-qr" rowspan="4" *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1">
-            <div class="qr-code">
-              <canvas #qrCanvas></canvas>
-            </div>
-          </td>
+              <td class="footer-qr" rowspan="4" *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1">
+                <div class="qr-code">
+                  <canvas #qrCanvas width="60" height="60"></canvas>
+                </div>
+              </td>
 
-            <td class="footer-stamp" rowspan="4">
-              <div class="remarks-label">Remarks / ملاحظات :</div>
-              <div class="stamp-label">Stamp / ختم :</div>
-            </td>
-            <td class="footer-spacer"></td>
-            <td class="footer-spacer"></td>
-            <td class="footer-amount-label">Amount / كمية :</td>
-            <td class="footer-amount-value">{{ getTotalAmount() }}</td>
+              <td class="footer-stamp" rowspan="4">
+                <div class="remarks-label">Remarks / ملاحظات :</div>
+                <div class="stamp-label">Stamp / ختم :</div>
+              </td>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Amount / كمية :</td>
+              <td class="footer-amount-value">{{ getTotalAmount() }}</td>
+            </tr>
+            <tr>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Discount / تخفيض :</td>
+              <td class="footer-amount-value">{{ getTotalDiscount() }}</td>
+            </tr>
+            <tr>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">VAT / ضريبة القيمة المضافة :</td>
+              <td class="footer-amount-value">{{ getTotalVat() }}</td>
+            </tr>
+            <tr>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Net Amt / صافي المبلغ :</td>
+              <td class="footer-amount-value">{{ getNetAmount() }}</td>
+            </tr>
+          </table>
+          <!-- Amount in words row -->
+          <div class="amount-words-row">
+            <div class="amount-words-left">Amount in words</div>
+            <div class="amount-words-center">{{ getNetAmountInWords() }}</div>
+            <div class="amount-words-right">المبلغ بالكلمات</div>
+          </div>
+          <!-- Bank details and signatures -->
+          <div class="bank-signatures">
+            <div class="bank-left">
+              <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">KHAIR
+                  LUBRICANTS
+                  COMPANY</span><span class="bank-ar">اسم الحساب</span></div>
+              <div class="bank-row"><span class="bank-label">Bank Name</span><span class="bank-value">Alrajhi
+                  Bank</span><span class="bank-ar">اسم البنك</span></div>
+              <div class="bank-row"><span class="bank-label">Account No</span><span
+                  class="bank-value">452000010006080122276</span><span class="bank-ar">رقم الحساب</span></div>
+              <div class="bank-row"><span class="bank-label">IBAN No</span><span
+                  class="bank-value">SA7080000452608010122276</span><span class="bank-ar">ايبان</span></div>
+            </div>
+            <div class="bank-right">
+              <div class="sig-line"><span>Salesman / بائع :</span><span
+                  class="sig-underscore">_______________________</span></div>
+              <div class="sig-line"><span>Receiver / اﻟﻣﺗﻠﻘﻲ :</span><span
+                  class="sig-underscore">_______________________</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /////////////////////////////////////////////////////////////////// -->
+<!-- //second cmp id code -->
+<!-- Print Content (Hidden on screen, visible when printing) -->
+<div class="print-only" *ngIf="invoiceData?.invoice?.cmp_id === '1101'">
+  <!-- Page Loop - Each page gets the complete invoice layout -->
+  <div *ngFor="let page of getInvoicePages(); let pageIndex = index" class="invoice-page"
+    [attr.data-page]="pageIndex + 1">
+
+    <div class="print-container">
+      <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png"
+        alt="Print Image" class="print-image">
+      <div class="overlay-text_hund">Tax Invoice <span class="arabic-title"> </span></div>
+      <!-- <div class=".overlay-text">
+        <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1"
+          src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
+
+        Tax Invoice
+        <span class="arabic-title">فاتورة ضريبية</span>
+      </div> -->
+
+      <!-- Invoice Details Section -->
+      <div class="invoice-details_hund">
+        <table class="details-table">
+          <tr>
+            <td class="label">Invoice No</td>
+            <td class="value"></td>
+            <td class="arabic-label"> {{ invoiceData?.invoice?.invoice_no }}</td>
           </tr>
           <tr>
-            <td class="footer-spacer"></td>
-            <td class="footer-spacer"></td>
-            <td class="footer-amount-label">Discount / تخفيض :</td>
-            <td class="footer-amount-value">{{ getTotalDiscount() }}</td>
+            <td class="label">Invoice Date</td>
+            <td class="value"></td>
+            <td class="arabic-label">{{ invoiceData?.invoice?.invoice_date | date:'dd-MM-yyyy' }}</td>
           </tr>
           <tr>
-            <td class="footer-spacer"></td>
-            <td class="footer-spacer"></td>
-            <td class="footer-amount-label">VAT / ضريبة القيمة المضافة :</td>
-            <td class="footer-amount-value">{{ getTotalVat() }}</td>
+            <td class="label">Due Date</td>
+            <td class="value"></td>
+            <td class="arabic-label">{{ invoiceData?.invoice?.invoice_duedate | date:'dd-MM-yyyy' }}</td>
           </tr>
           <tr>
-            <td class="footer-spacer"></td>
-            <td class="footer-spacer"></td>
-            <td class="footer-amount-label">Net Amt / صافي المبلغ :</td>
-            <td class="footer-amount-value">{{ getNetAmount() }}</td>
+            <td class="label">P.O No</td>
+            <td class="value"></td>
+            <td class="arabic-label">{{ invoiceData?.invoice?.invoice_po }}</td>
+          </tr>
+          <tr>
+            <td class="label">Payment Mode</td>
+            <td class="value"></td>
+            <td class="arabic-label">{{ invoiceData?.invoice?.zpaymentmeanscode_name }} </td>
           </tr>
         </table>
-        <!-- Amount in words row -->
-        <div class="amount-words-row">
-          <div class="amount-words-left">Amount in words</div>
-          <div class="amount-words-center">{{ getNetAmountInWords() }}</div>
-          <div class="amount-words-right">المبلغ بالكلمات</div>
+      </div>
+
+      <!-- Buyer/Seller Section -->
+      <div class="buyer-seller-section_hund">
+        <table class="buyer-seller-table">
+          <tr class="header-row">
+            <td class=" buyer-header_hund"><span class="english-text"></span><span class="arabic-text_hund"></span>
+           Tax Invoice
+            </td>
+            <!-- <td class="seller-header"><span class="english-text"></span><span class="arabic-text"></span></td> -->
+         
+          </tr>
+          <tr>
+            <td class="buyer-content">
+              <div class="contact-info">
+                <div class="info-row"><span class="field-label">Name</span><span class="field-value"></span><span class="field-arabic">{{
+                    invoiceData?.invoice?.party_displayname }}</span>
+                    </div>
+                <div class="info-row"><span class="field-label">Address</span><span class="field-value"></span><span class="field-arabic">{{
+                    invoiceData?.invoice?.party_address }}</span>
+                </div>
+                <div class="info-row"><span class="field-label">City</span><span
+                    class="field-value"></span><span
+                    class="field-arabic">{{invoiceData?.invoice?.party_city }}</span></div>
+
+
+                <div class="info-row"><span class="field-label">Country</span><span
+                    class="field-value"></span><span class="field-arabic">Canada</span></div>
+
+                <div class="info-row "><span class="field-label"></span><span class="field-value"></span><span
+                    class="field-arabic">.</span></div>
+
+              </div>
+            </td>
+            <!-- <td class="seller-content">
+              <div class="contact-info">
+                <div class="info-row"><span class="field-label">Name</span><span class="field-value"></span><span class="field-arabic">Hund
+                    Cleaning</span></div>
+                <div class="info-row"><span class="field-label">Address</span><span class="field-value"></span><span class="field-arabic">{{
+                    invoiceData?.invoice?.party_address }}</span>
+                </div>
+
+
+                <div class="info-row"><span class="field-label">City</span><span
+                    class="field-value"></span><span class="field-arabic">Vancouver</span></div>
+                <div class="info-row"><span class="field-label">Country</span><span class="field-value">
+                  </span><span class="field-arabic">Canada</span></div>
+
+              </div>
+            </td> -->
+          </tr>
+        </table>
+      </div>
+
+      <!-- Invoice Items Section -->
+      <div class="invoice-items-section">
+        <!-- third from claude -->
+        <div class="items-table-wrapper">
+
+          <!-- BACKGROUND TABLE - SHOWS COLUMN LINES ALWAYS -->
+          <table class="background-grid-table">
+            <colgroup>
+              <col style="width: 5%;">
+              <col style="width: 15%;">
+              <col style="width: 25%;">
+              <col style="width: 8%;">
+              <col style="width: 8%;">
+              <col style="width: 8%;">
+              <col style="width: 10%;">
+              <col style="width: 8%;">
+              <col style="width: 8%;">
+              <col style="width: 10%;">
+            </colgroup>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+
+          <!-- DATA TABLE - YOUR ACTUAL DATA -->
+          <table class="items-table">
+            <tr class="items-header-row">
+              <td class="items-header">POS Sr<br><span></span></td>
+              <td class="items-header">Code<br><span></span></td>
+              <td class="items-header">Item Description<br><span></span></td>
+              <td class="items-header">Unit<br><span></span></td>
+              <td class="items-header">Invoiced<br>Qty<br><span></span></td>
+              <td class="items-header">Rate<br><span></span></td>
+              <td class="items-header">Amount<br><span></span></td>
+              <td class="items-header">Discount<br><span></span></td>
+              <td class="items-header">Tax<span></span></td>
+              <td class="items-header">Net Amt<br><span> </span></td>
+            </tr>
+            <tr class="items-data-row" *ngFor="let item of getPageItems(pageIndex)">
+              <td class="items-data">{{ item.posNumber }}.</td>
+              <td class="items-data">{{ item.item_code }}</td>
+              <td class="items-data">{{ item.item_name }}</td>
+              <td class="items-data">{{ item.item_unit }}</td>
+              <td class="items-data">{{ item.invoiced_qty }}</td>
+              <td class="items-data">{{ item.invoiced_rate }}</td>
+              <td class="items-data">{{ item.invoiced_pricewithoutdiscounttax }}</td>
+              <td class="items-data">{{ item.invoiced_totaldiscount }}</td>
+              <td class="items-data">{{ item.invoiced_totalvat }}</td>
+              <td class="items-data">{{ item.invoiced_netprice }}</td>
+            </tr>
+          </table>
+
         </div>
-        <!-- Bank details and signatures -->
-        <div class="bank-signatures">
-          <div class="bank-left">
-            <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">KHAIR LUBRICANTS
-                COMPANY</span><span class="bank-ar">اسم الحساب</span></div>
-            <div class="bank-row"><span class="bank-label">Bank Name</span><span class="bank-value">Alrajhi
-                Bank</span><span class="bank-ar">اسم البنك</span></div>
-            <div class="bank-row"><span class="bank-label">Account No</span><span
-                class="bank-value">452000010006080122276</span><span class="bank-ar">رقم الحساب</span></div>
-            <div class="bank-row"><span class="bank-label">IBAN No</span><span
-                class="bank-value">SA7080000452608010122276</span><span class="bank-ar">ايبان</span></div>
+
+        <!-- Footer Section - Only show on last page -->
+        <div *ngIf="isLastPage(pageIndex)">
+          <!-- Absolute positioned Total Qty elements -->
+          <div class="total-qty-container">
+            <div class="footer-total-label-abs">Total Qty </div>
+            <div class="footer-total-value-abs">{{ getTotalQty() }}</div>
           </div>
-          <div class="bank-right">
-            <div class="sig-line"><span>Salesman / بائع :</span><span
-                class="sig-underscore">_______________________</span></div>
-            <div class="sig-line"><span>Receiver / اﻟﻣﺗﻠﻘﻲ :</span><span
-                class="sig-underscore">_______________________</span></div>
+
+          <table class="invoice-footer-table">
+            <tr>
+              <!-- <div class="qr-code">{{ invoiceData?.qrcode_data }}
+  </div> -->
+              <!-- <td class="footer-qr" rowspan="4">
+              <div class="qr-code">
+                <canvas #qrCanvas width="150" height="150"></canvas>
+              </div>
+            </td> -->
+              <td class="footer-qr" rowspan="4" *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1">
+                <div class="qr-code">
+                  <canvas #qrCanvas width="60" height="60"></canvas>
+                </div>
+              </td>
+
+              <td class="footer-stamp" rowspan="4">
+                <div class="remarks-label">Remarks:</div>
+                <div class="stamp-label">Stamp :</div>
+              </td>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Amount:</td>
+              <td class="footer-amount-value">{{ getTotalAmount() }}</td>
+            </tr>
+            <tr>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Discount :</td>
+              <td class="footer-amount-value">{{ getTotalDiscount() }}</td>
+            </tr>
+            <tr>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Tax :</td>
+              <td class="footer-amount-value">{{ getTotalVat() }}</td>
+            </tr>
+            <tr>
+              <td class="footer-spacer"></td>
+              <td class="footer-spacer"></td>
+              <td class="footer-amount-label">Net Amt  :</td>
+              <td class="footer-amount-value">{{ getNetAmount() }}</td>
+            </tr>
+          </table>
+          <!-- Amount in words row -->
+          <div class="amount-words-row">
+            <div class="amount-words-left">Amount in words</div>
+            <div class="amount-words-center">{{ getNetAmountInWords() }}</div>
+            <div class="amount-words-right">  </div>
+          </div>
+          <!-- Bank details and signatures -->
+          <div class="bank-signatures">
+            <!-- <div class="bank-left">
+              <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">KHAIR
+                  LUBRICANTS
+                  COMPANY</span><span class="bank-ar">اسم الحساب</span></div>
+              <div class="bank-row"><span class="bank-label">Bank Name</span><span class="bank-value">Alrajhi
+                  Bank</span><span class="bank-ar">اسم البنك</span></div>
+              <div class="bank-row"><span class="bank-label">Account No</span><span
+                  class="bank-value">452000010006080122276</span><span class="bank-ar">رقم الحساب</span></div>
+              <div class="bank-row"><span class="bank-label">IBAN No</span><span
+                  class="bank-value">SA7080000452608010122276</span><span class="bank-ar">ايبان</span></div>
+            </div> -->
+            <div class="bank-right">
+              <div class="sig-line"><span>Salesman:</span><span
+                  class="sig-underscore">_______________________</span></div>
+              <div class="sig-line"><span>Receiver  :</span><span
+                  class="sig-underscore">_______________________</span></div>
+            </div>
           </div>
         </div>
       </div>
