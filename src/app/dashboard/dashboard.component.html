@@ -348,7 +348,7 @@
     <div class="print-container">
       <img src="https://foodsted.com/khairlubricants/img/letterhead_{{ invoiceData?.invoice?.cmp_id }}.png"
         alt="Print Image" class="print-image">
-      <div class="overlay-text_hund">Tax Invoice <span class="arabic-title"> </span></div>
+      <!-- <div class="overlay-text_hund">Tax Invoice <span class="arabic-title"> </span></div> -->
       <!-- <div class=".overlay-text">
         <img *ngIf="invoiceData?.invoice?.invoice_submittedzatca == 1"
           src="https://www.foodsted.com/khairlubricants-ng/zatcaIcon.png" alt="ZATCA" class="zatca-icon" />
@@ -358,7 +358,7 @@
       </div> -->
 
       <!-- Invoice Details Section -->
-      <div class="invoice-details_hund">
+      <!-- <div class="invoice-details_hund">
         <table class="details-table">
           <tr>
             <td class="label">Invoice No</td>
@@ -386,21 +386,22 @@
             <td class="arabic-label">{{ invoiceData?.invoice?.zpaymentmeanscode_name }} </td>
           </tr>
         </table>
-      </div>
+      </div> -->
 
       <!-- Buyer/Seller Section -->
       <div class="buyer-seller-section_hund">
         <table class="buyer-seller-table">
           <tr class="header-row">
-            <td class=" buyer-header_hund"><span class="english-text"></span><span class="arabic-text_hund"></span>
-           Tax Invoice
+            <td class=" buyer-header_hund">
+              Invoice
             </td>
             <!-- <td class="seller-header"><span class="english-text"></span><span class="arabic-text"></span></td> -->
-         
+
           </tr>
           <tr>
-            <td class="buyer-content">
-              <div class="contact-info">
+            <td class="buyer-content_hund">
+              <!-- <div class="contact-info">
+
                 <div class="info-row"><span class="field-label">Name</span><span class="field-value"></span><span class="field-arabic">{{
                     invoiceData?.invoice?.party_displayname }}</span>
                     </div>
@@ -417,6 +418,85 @@
 
                 <div class="info-row "><span class="field-label"></span><span class="field-value"></span><span
                     class="field-arabic">.</span></div>
+
+              </div> -->
+              <div class="row-wrapper">
+
+                <div class="row-inner">
+
+                  <!-- Right 50% -->
+                  <div class="column">
+                    <div class="field name">Customer Id:</div>
+                    <div class="field_value value">{{
+                      invoiceData?.invoice?.party_coacode }}</div>
+                  </div>
+                  <!-- Left 50% -->
+                  <div class="column">
+                    <div class="field name">Invoice No:</div>
+                    <div class="field_value value">{{ invoiceData?.invoice?.invoice_no }}</div>
+                  </div>
+
+
+
+
+                </div>
+
+              </div>
+              <div class="row-wrapper">
+
+                <div class="row-inner">
+
+                  <!-- Left 50% -->
+                 <div class="column">
+                    <div class="field name">Customer Name:</div>
+                    <div class="field_value value">{{
+                      invoiceData?.invoice?.party_displayname }}</div>
+                  </div>
+
+                  <!-- Right 50% -->
+                  <div class="column">
+                    <div class="field name">Invoice Date:</div>
+                    <div class="field_value value">{{ invoiceData?.invoice?.invoice_date | date:'dd-MM-yyyy' }}</div>
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="row-wrapper">
+
+                <div class="row-inner">
+
+                  <!-- Left 50% -->
+                    <div class="column">
+                    <div class="field name">Address:</div>
+                    <div class="field_value value">{{
+                    invoiceData?.invoice?.party_address }}</div>
+                  </div>
+
+                  <!-- Right 50% -->
+                  <div class="column">
+                    <div class="field name">Payment Mode:</div>
+                    <div class="field_value value">{{ invoiceData?.invoice?.zpaymentmeanscode_name }}</div>
+                  </div>
+
+                </div>
+
+              </div>
+               <div class="row-wrapper">
+
+                <div class="row-inner">
+
+                  <!-- Left 50% -->
+                  <div class="column">
+                    <div class="field name">Phone:</div>
+                    <div class="field_value value">{{
+                    invoiceData?.invoice?.party_mobile }}</div>
+                  </div>
+
+                  <!-- Right 50% -->
+                 
+
+                </div>
 
               </div>
             </td>
@@ -441,7 +521,7 @@
       </div>
 
       <!-- Invoice Items Section -->
-      <div class="invoice-items-section">
+      <div class="invoice-items-section_hund">
         <!-- third from claude -->
         <div class="items-table-wrapper">
 
@@ -476,16 +556,16 @@
           <!-- DATA TABLE - YOUR ACTUAL DATA -->
           <table class="items-table">
             <tr class="items-header-row">
-              <td class="items-header">POS Sr<br><span></span></td>
-              <td class="items-header">Code<br><span></span></td>
+              <td class="items-header">Sr#<br><span></span></td>
+              <td class="items-header">Item Code<br><span></span></td>
               <td class="items-header">Item Description<br><span></span></td>
               <td class="items-header">Unit<br><span></span></td>
-              <td class="items-header">Invoiced<br>Qty<br><span></span></td>
-              <td class="items-header">Rate<br><span></span></td>
+              <td class="items-header">Quantity<span></span></td>
+              <td class="items-header">Price<br><span></span></td>
               <td class="items-header">Amount<br><span></span></td>
               <td class="items-header">Discount<br><span></span></td>
               <td class="items-header">Tax<span></span></td>
-              <td class="items-header">Net Amt<br><span> </span></td>
+              <td class="items-header">Total Amtount<br><span> </span></td>
             </tr>
             <tr class="items-data-row" *ngFor="let item of getPageItems(pageIndex)">
               <td class="items-data">{{ item.posNumber }}.</td>
@@ -532,25 +612,25 @@
               </td>
               <td class="footer-spacer"></td>
               <td class="footer-spacer"></td>
-              <td class="footer-amount-label">Amount:</td>
+              <td class="footer-amount-label">Amount</td>
               <td class="footer-amount-value">{{ getTotalAmount() }}</td>
             </tr>
             <tr>
               <td class="footer-spacer"></td>
               <td class="footer-spacer"></td>
-              <td class="footer-amount-label">Discount :</td>
+              <td class="footer-amount-label">Discount </td>
               <td class="footer-amount-value">{{ getTotalDiscount() }}</td>
             </tr>
             <tr>
               <td class="footer-spacer"></td>
               <td class="footer-spacer"></td>
-              <td class="footer-amount-label">Tax :</td>
+              <td class="footer-amount-label">Tax Amount</td>
               <td class="footer-amount-value">{{ getTotalVat() }}</td>
             </tr>
             <tr>
               <td class="footer-spacer"></td>
               <td class="footer-spacer"></td>
-              <td class="footer-amount-label">Net Amt  :</td>
+              <td class="footer-amount-label">Total Amt </td>
               <td class="footer-amount-value">{{ getNetAmount() }}</td>
             </tr>
           </table>
@@ -558,7 +638,7 @@
           <div class="amount-words-row">
             <div class="amount-words-left">Amount in words</div>
             <div class="amount-words-center">{{ getNetAmountInWords() }}</div>
-            <div class="amount-words-right">  </div>
+            <div class="amount-words-right"> </div>
           </div>
           <!-- Bank details and signatures -->
           <div class="bank-signatures">
@@ -574,10 +654,10 @@
                   class="bank-value">SA7080000452608010122276</span><span class="bank-ar">ايبان</span></div>
             </div> -->
             <div class="bank-right">
-              <div class="sig-line"><span>Salesman:</span><span
-                  class="sig-underscore">_______________________</span></div>
-              <div class="sig-line"><span>Receiver  :</span><span
-                  class="sig-underscore">_______________________</span></div>
+              <div class="sig-line"><span>Salesman:</span><span class="sig-underscore">_______________________</span>
+              </div>
+              <div class="sig-line"><span>Receiver :</span><span class="sig-underscore">_______________________</span>
+              </div>
             </div>
           </div>
         </div>
